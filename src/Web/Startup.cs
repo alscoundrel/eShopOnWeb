@@ -30,20 +30,29 @@ namespace Microsoft.eShopWeb.Web
     public class Startup
     {
         private IServiceCollection _services;
-        public Startup(IConfiguration configuration)
+
+        /// <summary>
+        /// Guarda as variáveis do ambiente de execução (Development,Staging,Production)
+        /// </summary>
+        private readonly IWebHostEnvironment _webHostEnvironment;
+
+        public Startup(IConfiguration configuration, IWebHostEnvironment webHostEnvironment)
         {
             Configuration = configuration;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         public IConfiguration Configuration { get; }
 
         public void ConfigureDevelopmentServices(IServiceCollection services)
         {
-            // use in-memory database
-            ConfigureInMemoryDatabases(services);
-
-            // use real database
-            //ConfigureProductionServices(services);
+            if(_webHostEnvironment.IsDevelopment()){
+                // use in-memory database
+                ConfigureInMemoryDatabases(services);
+            } else {
+                // use real database
+                ConfigureProductionServices(services);
+            }
         }
 
         private void ConfigureInMemoryDatabases(IServiceCollection services)
@@ -77,6 +86,14 @@ namespace Microsoft.eShopWeb.Web
         public void ConfigureTestingServices(IServiceCollection services)
         {
             ConfigureInMemoryDatabases(services);
+        }
+
+        /// <summary>
+        /// Estas funções são chamadas por convenção Configure<Ambiente>Services()
+        /// </summary>
+        /// <param name="services"></param>
+        public void ConfigureAzureServices(IServiceCollection services){
+            ConfigureProductionServices(services);
         }
 
 
