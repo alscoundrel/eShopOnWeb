@@ -24,6 +24,10 @@ namespace Microsoft.eShopWeb.Infrastructure.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+            builder.Entity<CatalogItem>()
+            .Property(x=>x.ShowPrice)
+            .HasDefaultValue(true);
+
             builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         }
     }

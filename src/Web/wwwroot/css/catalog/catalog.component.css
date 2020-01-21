@@ -71,7 +71,8 @@
   text-align: center;
   width: 33%;
   display: inline-block;
-  float: none !important; }
+  float: none !important;
+  vertical-align: top; }
   @media screen and (max-width: 1024px) {
     .esh-catalog-item {
       width: 50%; } }
