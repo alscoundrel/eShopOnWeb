@@ -24,6 +24,7 @@ namespace Microsoft.eShopWeb.Web.Services
             var updatedCatalogItem = existingCatalogItem;
             updatedCatalogItem.Name = viewModel.Name;
             updatedCatalogItem.Price = viewModel.Price;
+            updatedCatalogItem.ShowPrice = viewModel.ShowPrice;
 
             await _catalogItemRepository.UpdateAsync(updatedCatalogItem);
         }

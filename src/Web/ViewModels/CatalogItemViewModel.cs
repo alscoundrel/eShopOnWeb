@@ -6,5 +6,6 @@
         public string Name { get; set; }
         public string PictureUri { get; set; }
         public decimal Price { get; set; }
+        public bool ShowPrice { get; set; }
     }
 }
