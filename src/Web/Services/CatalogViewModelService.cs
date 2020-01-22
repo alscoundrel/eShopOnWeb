@@ -8,6 +8,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using static ApplicationCore.Interfaces.ICurrencyService;
+using ApplicationCore.Interfaces;
 
 namespace Microsoft.eShopWeb.Web.Services
 {
@@ -22,19 +24,37 @@ namespace Microsoft.eShopWeb.Web.Services
         private readonly IAsyncRepository<CatalogBrand> _brandRepository;
         private readonly IAsyncRepository<CatalogType> _typeRepository;
         private readonly IUriComposer _uriComposer;
+        private readonly ICurrencyService _currencyService;
+
+        private const Currency DEFAULT_PRICE_UNIT = Currency.USD; // TODO: Get from configuration
+        private const Currency USER_PRICE_UNIT = Currency.EUR;// TODO: Get FROM 
 
         public CatalogViewModelService(
             ILoggerFactory loggerFactory,
             IAsyncRepository<CatalogItem> itemRepository,
             IAsyncRepository<CatalogBrand> brandRepository,
             IAsyncRepository<CatalogType> typeRepository,
-            IUriComposer uriComposer)
+            IUriComposer uriComposer,
+            ICurrencyService currencyService)
         {
             _logger = loggerFactory.CreateLogger<CatalogViewModelService>();
             _itemRepository = itemRepository;
             _brandRepository = brandRepository;
             _typeRepository = typeRepository;
             _uriComposer = uriComposer;
+            _currencyService = currencyService;
+        }
+
+        private async Task<CatalogItemViewModel> CreateCatalogItemViewModel(CatalogItem catalogItem){
+            return new CatalogItemViewModel()
+                {
+                    Id = catalogItem.Id,
+                    Name = catalogItem.Name,
+                    PictureUri = catalogItem.PictureUri,
+                    Price = await _currencyService.Convert(catalogItem.Price, DEFAULT_PRICE_UNIT, USER_PRICE_UNIT),
+                    ShowPrice = catalogItem.ShowPrice,
+                    PriceUnit = USER_PRICE_UNIT
+                };
         }
 
         public async Task<CatalogIndexViewModel> GetCatalogItems(int pageIndex, int itemsPage, int? brandId, int? typeId)
@@ -56,14 +76,7 @@ namespace Microsoft.eShopWeb.Web.Services
 
             var vm = new CatalogIndexViewModel()
             {
-                CatalogItems = itemsOnPage.Select(i => new CatalogItemViewModel()
-                {
-                    Id = i.Id,
-                    Name = i.Name,
-                    PictureUri = i.PictureUri,
-                    Price = i.Price,
-                    ShowPrice = i.ShowPrice
-                }),
+                CatalogItems = await Task.WhenAll(itemsOnPage.Select(CreateCatalogItemViewModel)),
                 Brands = await GetBrands(),
                 Types = await GetTypes(),
                 BrandFilterApplied = brandId ?? 0,
