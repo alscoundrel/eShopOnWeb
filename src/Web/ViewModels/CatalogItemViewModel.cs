@@ -1,4 +1,6 @@
-﻿namespace Microsoft.eShopWeb.Web.ViewModels
+﻿using static ApplicationCore.Interfaces.ICurrencyService;
+
+namespace Microsoft.eShopWeb.Web.ViewModels
 {
     public class CatalogItemViewModel
     {
@@ -7,5 +9,6 @@
         public string PictureUri { get; set; }
         public decimal Price { get; set; }
         public bool ShowPrice { get; set; }
+        public Currency PriceUnit { get; set; }
     }
 }
