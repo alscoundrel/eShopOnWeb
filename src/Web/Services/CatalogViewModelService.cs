@@ -10,6 +10,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using static ApplicationCore.Interfaces.ICurrencyService;
 using ApplicationCore.Interfaces;
+using System.Threading;
 
 namespace Microsoft.eShopWeb.Web.Services
 {
@@ -45,19 +46,19 @@ namespace Microsoft.eShopWeb.Web.Services
             _currencyService = currencyService;
         }
 
-        private async Task<CatalogItemViewModel> CreateCatalogItemViewModel(CatalogItem catalogItem){
+        private async Task<CatalogItemViewModel> CreateCatalogItemViewModel(CatalogItem catalogItem, CancellationToken cancellationToken = default(CancellationToken)){
             return new CatalogItemViewModel()
                 {
                     Id = catalogItem.Id,
                     Name = catalogItem.Name,
                     PictureUri = catalogItem.PictureUri,
-                    Price = await _currencyService.Convert(catalogItem.Price, DEFAULT_PRICE_UNIT, USER_PRICE_UNIT),
+                    Price = await _currencyService.Convert(catalogItem.Price, DEFAULT_PRICE_UNIT, USER_PRICE_UNIT, cancellationToken),
                     ShowPrice = catalogItem.ShowPrice,
                     PriceUnit = USER_PRICE_UNIT
                 };
         }
 
-        public async Task<CatalogIndexViewModel> GetCatalogItems(int pageIndex, int itemsPage, int? brandId, int? typeId)
+        public async Task<CatalogIndexViewModel> GetCatalogItems(int pageIndex, int itemsPage, int? brandId, int? typeId, CancellationToken cancellationToken = default(CancellationToken))
         {
             _logger.LogInformation("GetCatalogItems called.");
 
@@ -74,11 +75,15 @@ namespace Microsoft.eShopWeb.Web.Services
                 itemOnPage.PictureUri = _uriComposer.ComposePicUri(itemOnPage.PictureUri);
             }
 
+            var catalogItemsTask = await Task.WhenAll(itemsOnPage.Select(catalogItem => CreateCatalogItemViewModel(catalogItem, cancellationToken)));
+            // em caso de algures haver um cancelamento o código para aqui e devolve um erro. Escusa de proceguir no processamento
+            cancellationToken.ThrowIfCancellationRequested();
+
             var vm = new CatalogIndexViewModel()
             {
-                CatalogItems = await Task.WhenAll(itemsOnPage.Select(CreateCatalogItemViewModel)),
-                Brands = await GetBrands(),
-                Types = await GetTypes(),
+                CatalogItems = catalogItemsTask,
+                Brands = await GetBrands(cancellationToken),
+                Types = await GetTypes(cancellationToken),
                 BrandFilterApplied = brandId ?? 0,
                 TypesFilterApplied = typeId ?? 0,
                 PaginationInfo = new PaginationInfoViewModel()
@@ -96,11 +101,12 @@ namespace Microsoft.eShopWeb.Web.Services
             return vm;
         }
 
-        public async Task<IEnumerable<SelectListItem>> GetBrands()
+        public async Task<IEnumerable<SelectListItem>> GetBrands(CancellationToken cancelationToken = default(CancellationToken))
         {
             _logger.LogInformation("GetBrands called.");
             var brands = await _brandRepository.ListAllAsync();
-
+            cancelationToken.ThrowIfCancellationRequested();
+            
             var items = new List<SelectListItem>
             {
                 new SelectListItem() { Value = null, Text = "All", Selected = true }
@@ -113,10 +119,12 @@ namespace Microsoft.eShopWeb.Web.Services
             return items;
         }
 
-        public async Task<IEnumerable<SelectListItem>> GetTypes()
+        public async Task<IEnumerable<SelectListItem>> GetTypes(CancellationToken cancelationToken = default(CancellationToken))
         {
             _logger.LogInformation("GetTypes called.");
             var types = await _typeRepository.ListAllAsync();
+            cancelationToken.ThrowIfCancellationRequested();
+
             var items = new List<SelectListItem>
             {
                 new SelectListItem() { Value = null, Text = "All", Selected = true }

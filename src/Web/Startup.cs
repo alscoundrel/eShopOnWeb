@@ -26,6 +26,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Mime;
+using Web.Extensions;
 
 namespace Microsoft.eShopWeb.Web
 {
@@ -112,18 +113,11 @@ namespace Microsoft.eShopWeb.Web
                 services.AddSingleton<ICurrencyService, CurrencyServiceStatic>();
             }
             else{
-                //services.AddSingleton<ICurrencyService, CurrencyServiceExternal>();
+                services.AddSingleton<ICurrencyService, CurrencyServiceExternal>();
             }
+
             services.AddScoped(typeof(IAsyncRepository<>), typeof(EfRepository<>));
-            services.AddScoped<ICatalogViewModelService, CachedCatalogViewModelService>();
-            services.AddScoped<IBasketService, BasketService>();
-            services.AddScoped<IBasketViewModelService, BasketViewModelService>();
-            services.AddScoped<IOrderService, OrderService>();
-            services.AddScoped<IOrderRepository, OrderRepository>();
-            services.AddScoped<CatalogViewModelService>();
-            services.AddScoped<ICatalogItemViewModelService, CatalogItemViewModelService>();
-            services.Configure<CatalogSettings>(Configuration);
-            services.AddSingleton<IUriComposer>(new UriComposer(Configuration.Get<CatalogSettings>()));
+            services.AddCatalogServices(Configuration);
             services.AddScoped(typeof(IAppLogger<>), typeof(LoggerAdapter<>));
             services.AddTransient<IEmailSender, EmailSender>();
 

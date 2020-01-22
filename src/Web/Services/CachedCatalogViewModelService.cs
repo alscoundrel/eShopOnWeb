@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Threading;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.eShopWeb.Web.ViewModels;
 using Microsoft.Extensions.Caching.Memory;
@@ -19,32 +20,32 @@ namespace Microsoft.eShopWeb.Web.Services
             _catalogViewModelService = catalogViewModelService;
         }
 
-        public async Task<IEnumerable<SelectListItem>> GetBrands()
+        public async Task<IEnumerable<SelectListItem>> GetBrands(CancellationToken cancelattionToken = default(CancellationToken))
         {
             return await _cache.GetOrCreateAsync(CacheHelpers.GenerateBrandsCacheKey(), async entry =>
                     {
                         entry.SlidingExpiration = CacheHelpers.DefaultCacheDuration;
-                        return await _catalogViewModelService.GetBrands();
+                        return await _catalogViewModelService.GetBrands(cancelattionToken);
                     });
         }
 
-        public async Task<CatalogIndexViewModel> GetCatalogItems(int pageIndex, int itemsPage, int? brandId, int? typeId)
+        public async Task<CatalogIndexViewModel> GetCatalogItems(int pageIndex, int itemsPage, int? brandId, int? typeId, CancellationToken cancelattionToken = default(CancellationToken))
         {
             var cacheKey = CacheHelpers.GenerateCatalogItemCacheKey(pageIndex, Constants.ITEMS_PER_PAGE, brandId, typeId);
 
             return await _cache.GetOrCreateAsync(cacheKey, async entry =>
             {
                 entry.SlidingExpiration = CacheHelpers.DefaultCacheDuration;
-                return await _catalogViewModelService.GetCatalogItems(pageIndex, itemsPage, brandId, typeId);
+                return await _catalogViewModelService.GetCatalogItems(pageIndex, itemsPage, brandId, typeId, cancelattionToken);
             });
         }
 
-        public async Task<IEnumerable<SelectListItem>> GetTypes()
+        public async Task<IEnumerable<SelectListItem>> GetTypes(CancellationToken cancelattionToken = default(CancellationToken))
         {
             return await _cache.GetOrCreateAsync(CacheHelpers.GenerateTypesCacheKey(), async entry =>
             {
                 entry.SlidingExpiration = CacheHelpers.DefaultCacheDuration;
-                return await _catalogViewModelService.GetTypes();
+                return await _catalogViewModelService.GetTypes(cancelattionToken);
             });
         }
     }
