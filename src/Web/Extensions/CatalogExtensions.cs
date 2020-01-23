@@ -27,6 +27,7 @@ namespace Web.Extensions
             services.Configure<CatalogSettings>(configuration);
             services.AddSingleton<IUriComposer>(new UriComposer(configuration.Get<CatalogSettings>()));
 
+            
         }
 
     }

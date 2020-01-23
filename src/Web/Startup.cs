@@ -27,6 +27,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Mime;
 using Web.Extensions;
+using Web.Extensions.Middleware;
 
 namespace Microsoft.eShopWeb.Web
 {
@@ -200,6 +201,9 @@ namespace Microsoft.eShopWeb.Web
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            // uso para calcular tempo de resposta dos Middleware
+            app.UseBenchmarking();
+
             app.UseHealthChecks("/health",
                 new HealthCheckOptions
                 {
@@ -233,6 +237,10 @@ namespace Microsoft.eShopWeb.Web
             }
 
             app.UseStaticFiles();
+            
+            // uso para apanhar informacao da cultura
+            app.UseRequestCulture();
+
             app.UseRouting();
             
             app.UseHttpsRedirection();
