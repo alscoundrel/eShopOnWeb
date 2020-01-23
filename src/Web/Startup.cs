@@ -119,6 +119,7 @@ namespace Microsoft.eShopWeb.Web
 
             services.AddScoped(typeof(IAsyncRepository<>), typeof(EfRepository<>));
             services.AddCatalogServices(Configuration);
+            
             services.AddScoped(typeof(IAppLogger<>), typeof(LoggerAdapter<>));
             services.AddTransient<IEmailSender, EmailSender>();
 
