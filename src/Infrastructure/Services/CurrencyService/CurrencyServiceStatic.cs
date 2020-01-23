@@ -1,21 +1,28 @@
 ﻿using ApplicationCore.Interfaces;
-using System.Globalization;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using static ApplicationCore.Interfaces.ICurrencyService;
 
 namespace Infrastructure.Services
 {
     public class CurrencyServiceStatic : ICurrencyService
     {
-        
-        public CurrencyServiceStatic(CultureInfo cultureInfo){
 
-        }
 
-        public Task<decimal> Convert(decimal value, ICurrencyService.Currency source, ICurrencyService.Currency target, CancellationToken cancellationToken = default(CancellationToken))
+        public Task<decimal> Convert(decimal value, Currency source, Currency target, CancellationToken cancellationToken = default(CancellationToken))
         {
+
+            Dictionary<string, decimal> rats = new Dictionary<string, decimal>();
+            rats.Add("USD", 1.00m);
+            rats.Add("EUR", 1.99m);
+            rats.Add("GBP", 1.55m);
+
+            var rat = 1.03m;
+            rats.TryGetValue(target.ToString(), out rat);
+
             //throw new System.NotImplementedException();
-            return Task.FromResult(value*1.03m); // TODO: miss implementation
+            return Task.FromResult(value*rat); // TODO: miss implementation
         }
     }
 }

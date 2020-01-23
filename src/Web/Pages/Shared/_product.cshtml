@@ -12,7 +12,7 @@
         @if(Model.ShowPrice)
         {
             <span class="product-price">@Model.Price.ToString("N2")</span>
-            <span class="product-price-unit">@Model.PriceUnit.ToString()</span>
+            <span class="product-price-unit">@Model.PriceSymbol</span>
         }
         else{
             <span>"Sob-Consulta"</span>

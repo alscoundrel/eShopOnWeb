@@ -10,5 +10,6 @@ namespace Microsoft.eShopWeb.Web.ViewModels
         public decimal Price { get; set; }
         public bool ShowPrice { get; set; }
         public Currency PriceUnit { get; set; }
+        public string PriceSymbol { get; set; }
     }
 }
