@@ -20,12 +20,8 @@ namespace Web.Extensions.Middleware
                 new CultureInfo("fr-FR"),
                 new CultureInfo("pt-PT")
             };
-
-<<<<<<< HEAD
-            var defaulCulture = "pt-PT";
-=======
+            
             var defaulCulture = "en-GB";
->>>>>>> 7593090aa30397e7f73b49dbc228a9cf3acf745c
             var options = new RequestLocalizationOptions()
             {
                 DefaultRequestCulture = new RequestCulture(culture: defaulCulture, uiCulture: defaulCulture),
