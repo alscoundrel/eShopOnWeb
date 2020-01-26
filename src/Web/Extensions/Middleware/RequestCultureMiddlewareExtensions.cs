@@ -1,3 +1,4 @@
+using System;
 using System.Globalization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Localization;
@@ -10,8 +11,6 @@ namespace Web.Extensions.Middleware
     {
         public static void UseRequestCulture(this IApplicationBuilder app)
         {
-            app.UseMiddleware<RequestCultureMiddleware>();
-
             var supportedCultures = new[]
             {
                 new CultureInfo("en-US"),
@@ -33,6 +32,8 @@ namespace Web.Extensions.Middleware
                 new RouteDataRequestCultureProvider() { Options = options } 
             };
             app.UseRequestLocalization(options);
+            Console.WriteLine(CultureInfo.CurrentCulture);
+            app.UseMiddleware<RequestCultureMiddleware>();
         }
     }
 }

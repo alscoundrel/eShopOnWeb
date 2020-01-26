@@ -13,6 +13,7 @@ using ApplicationCore.Interfaces;
 using System.Threading;
 using Infrastructure.Services;
 using System.Globalization;
+using Microsoft.Extensions.Configuration;
 
 namespace Microsoft.eShopWeb.Web.Services
 {
@@ -28,8 +29,9 @@ namespace Microsoft.eShopWeb.Web.Services
         private readonly IAsyncRepository<CatalogType> _typeRepository;
         private readonly IUriComposer _uriComposer;
         private readonly ICurrencyService _currencyService;
+        private readonly IConfiguration _configuration;
 
-        private const Currency DEFAULT_PRICE_UNIT = Currency.USD; // TODO: Get from configuration
+        private Currency default_price_unit = Currency.USD; // TODO: Get from configuration
         private Currency user_price_unit;// TODO: Get FROM user Culture
 
         public CatalogViewModelService(
@@ -38,7 +40,8 @@ namespace Microsoft.eShopWeb.Web.Services
             IAsyncRepository<CatalogBrand> brandRepository,
             IAsyncRepository<CatalogType> typeRepository,
             IUriComposer uriComposer,
-            ICurrencyService currencyService)
+            ICurrencyService currencyService,
+            IConfiguration configuration)
         {
             _logger = loggerFactory.CreateLogger<CatalogViewModelService>();
             _itemRepository = itemRepository;
@@ -46,8 +49,10 @@ namespace Microsoft.eShopWeb.Web.Services
             _typeRepository = typeRepository;
             _uriComposer = uriComposer;
             _currencyService = currencyService;
+            _configuration = configuration;
 
-            user_price_unit = CultureServiceUser.FindCurrency();
+            Enum.TryParse(_configuration["DefaultCulture"], true, out default_price_unit);
+            user_price_unit = CultureServiceUser.FindCurrency(Currency default_price_unit);
         }
 
         private async Task<CatalogItemViewModel> CreateCatalogItemViewModel(CatalogItem catalogItem, CancellationToken cancellationToken = default(CancellationToken)){
@@ -56,7 +61,7 @@ namespace Microsoft.eShopWeb.Web.Services
                     Id = catalogItem.Id,
                     Name = catalogItem.Name,
                     PictureUri = catalogItem.PictureUri,
-                    Price = await _currencyService.Convert(catalogItem.Price, DEFAULT_PRICE_UNIT, user_price_unit, cancellationToken),
+                    Price = await _currencyService.Convert(catalogItem.Price, default_price_unit, user_price_unit, cancellationToken),
                     ShowPrice = catalogItem.ShowPrice,
                     PriceUnit = user_price_unit,
                     PriceSymbol = CultureInfo.CurrentCulture.NumberFormat.CurrencySymbol
