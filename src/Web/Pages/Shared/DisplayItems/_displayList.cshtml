@@ -1,0 +1,8 @@
+﻿<div class="">
+	@foreach (var catalogItem in Model.CatalogModel.CatalogItems)
+	{
+		<div class="">
+			<partial name="_product" for="@catalogItem" />
+		</div>
+	}
+</div>

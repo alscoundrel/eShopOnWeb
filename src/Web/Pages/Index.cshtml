@@ -22,18 +22,42 @@
     </div>
 </section>
 <div class="container">
+    <form method="get">
+        <div>
+            I want to see:
+            <select name="displayMode">
+                <option value="gallery">Gallery</option>
+                <option value="list">List</option>
+                <option value="table">Table</option>
+            </select>
+            &nbsp;
+            <input type="submit" value="Submit" />
+        </div>
+    </form>
+
+    @{
+        var vista = "grid";
+        var method = Request.Method;
+        if(method == "GET"){
+            var f = Request;
+        //    vista = Request.Form["displayMode"].ToString();
+        //    vista = r["displayMode"];
+        }
+    }
     @if (Model.CatalogModel.CatalogItems.Any())
     {
         <partial name="_pagination" for="CatalogModel.PaginationInfo" />
 
-        <div class="esh-catalog-items row">
-            @foreach (var catalogItem in Model.CatalogModel.CatalogItems)
-            {
-                <div class="esh-catalog-item col-md-4">
-                    <partial name="_product" for="@catalogItem" />
-                </div>
-            }
-        </div>
+        @switch (vista)
+        {
+            case "grid":
+                <partial name="DisplayItems/_displayGallery"/>
+                break;
+            default:
+                <partial name="DisplayItems/_displayList"/>
+                break;
+        }
+        
 
         <partial name="_pagination" for="CatalogModel.PaginationInfo" />
     }
