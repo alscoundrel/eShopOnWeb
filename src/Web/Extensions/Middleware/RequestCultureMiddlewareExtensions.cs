@@ -23,7 +23,7 @@ namespace Web.Extensions.Middleware
                 new CultureInfo("pt-PT")
             };
             var configuration = app.ApplicationServices.GetService<IConfiguration>();
-            var defaulUserCulture = configuration.GetValue<string>("default_culture") ?? "en-GB";
+            var defaulUserCulture = configuration.GetValue<string>("DefaultCulture") ?? "en-GB";
             var options = new RequestLocalizationOptions()
             {
                 DefaultRequestCulture = new RequestCulture(culture: defaulUserCulture, uiCulture: defaulUserCulture),
@@ -33,9 +33,11 @@ namespace Web.Extensions.Middleware
             options.RequestCultureProviders = new List<IRequestCultureProvider>()  
             {
                 new QueryStringRequestCultureProvider(),
+                new CookieRequestCultureProvider(),
                 new RouteDataRequestCultureProvider() { Options = options } 
             };
             app.UseRequestLocalization(options);
+            
         }
     }
 }

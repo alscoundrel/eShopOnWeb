@@ -17,8 +17,8 @@ namespace Infrastructure.Services
 
         public static Currency FindCurrency(Currency? default_price_unit){
             Currency currency;
-            if(Enum.TryParse(RegionInfo.CurrentRegion.ISOCurrencySymbol, true, out currency)){ return currency;}
-            return default_price_unit.HasValue?default_price_unit.Value:Currency.USD;// TODO: Get from configuration
+            if(Enum.TryParse(new RegionInfo(CultureInfo.CurrentCulture.Name).ISOCurrencySymbol, true, out currency)){ return currency;}
+            return default_price_unit??Currency.USD;// TODO: Get from configuration
         }
     }
 }
