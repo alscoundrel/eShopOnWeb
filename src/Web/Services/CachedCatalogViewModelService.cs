@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Globalization;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Threading;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -31,7 +32,8 @@ namespace Microsoft.eShopWeb.Web.Services
 
         public async Task<CatalogIndexViewModel> GetCatalogItems(int pageIndex, int itemsPage, int? brandId, int? typeId, CancellationToken cancelattionToken = default(CancellationToken))
         {
-            var cacheKey = CacheHelpers.GenerateCatalogItemCacheKey(pageIndex, Constants.ITEMS_PER_PAGE, brandId, typeId);
+            var culture = CultureInfo.CurrentCulture.Name;
+            var cacheKey = CacheHelpers.GenerateCatalogItemCacheKey(pageIndex, Constants.ITEMS_PER_PAGE, culture, brandId, typeId);
 
             return await _cache.GetOrCreateAsync(cacheKey, async entry =>
             {

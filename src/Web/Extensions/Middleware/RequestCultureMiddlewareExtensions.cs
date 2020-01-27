@@ -1,9 +1,12 @@
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Localization.Routing;
+using Microsoft.Extensions.Configuration;
 using Web.Middleware;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Web.Extensions.Middleware
 {
@@ -19,21 +22,20 @@ namespace Web.Extensions.Middleware
                 new CultureInfo("fr-FR"),
                 new CultureInfo("pt-PT")
             };
-            
-            var defaulCulture = "en-GB";
+            var configuration = app.ApplicationServices.GetService<IConfiguration>();
+            var defaulUserCulture = configuration.GetValue<string>("default_culture") ?? "en-GB";
             var options = new RequestLocalizationOptions()
             {
-                DefaultRequestCulture = new RequestCulture(culture: defaulCulture, uiCulture: defaulCulture),
+                DefaultRequestCulture = new RequestCulture(culture: defaulUserCulture, uiCulture: defaulUserCulture),
                 SupportedCultures = supportedCultures,
                 SupportedUICultures = supportedCultures
             };
-            options.RequestCultureProviders = new[] 
-            { 
+            options.RequestCultureProviders = new List<IRequestCultureProvider>()  
+            {
+                new QueryStringRequestCultureProvider(),
                 new RouteDataRequestCultureProvider() { Options = options } 
             };
             app.UseRequestLocalization(options);
-            Console.WriteLine(CultureInfo.CurrentCulture);
-            app.UseMiddleware<RequestCultureMiddleware>();
         }
     }
 }
