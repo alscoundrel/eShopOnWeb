@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System.Globalization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.eShopWeb.ApplicationCore.Constants;
 using Microsoft.eShopWeb.Web.Extensions;
@@ -25,7 +26,8 @@ namespace Microsoft.eShopWeb.Web.Pages.Admin
 
         public async Task OnGet(CatalogIndexViewModel catalogModel, int? pageId)
         {
-            var cacheKey = CacheHelpers.GenerateCatalogItemCacheKey(pageId.GetValueOrDefault(), Constants.ITEMS_PER_PAGE, catalogModel.BrandFilterApplied, catalogModel.TypesFilterApplied);
+            var culture = CultureInfo.CurrentCulture.Name;
+            var cacheKey = CacheHelpers.GenerateCatalogItemCacheKey(pageId.GetValueOrDefault(), Constants.ITEMS_PER_PAGE, culture, catalogModel.BrandFilterApplied, catalogModel.TypesFilterApplied);
 
             _cache.Remove(cacheKey);
 

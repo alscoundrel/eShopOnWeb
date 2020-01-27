@@ -52,7 +52,7 @@ namespace Microsoft.eShopWeb.Web.Services
             _configuration = configuration;
 
             Enum.TryParse(_configuration["DefaultCulture"], true, out default_price_unit);
-            user_price_unit = CultureServiceUser.FindCurrency(Currency default_price_unit);
+            user_price_unit = CultureServiceUser.FindCurrency(default_price_unit);
         }
 
         private async Task<CatalogItemViewModel> CreateCatalogItemViewModel(CatalogItem catalogItem, CancellationToken cancellationToken = default(CancellationToken)){
