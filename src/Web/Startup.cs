@@ -111,13 +111,15 @@ namespace Microsoft.eShopWeb.Web
             services.AddMediatR(typeof(BasketViewModelService).Assembly);
 
             if(_webHostEnvironment.EnvironmentName == "Azure" || _webHostEnvironment.IsDevelopment()){
-                services.AddSingleton<ICurrencyService, CurrencyServiceStatic>();
+                //services.AddSingleton<ICurrencyService, CurrencyServiceStatic>();
+                services.AddSingleton<ICurrencyService, CurrencyServiceExchangeRates>();
             }
             else{
                 services.AddSingleton<ICurrencyService, CurrencyServiceExternal>();
             }
 
             services.AddScoped(typeof(IAsyncRepository<>), typeof(EfRepository<>));
+            services.AddCurrencyServices(Configuration);
             services.AddCatalogServices(Configuration);
             
             services.AddScoped(typeof(IAppLogger<>), typeof(LoggerAdapter<>));

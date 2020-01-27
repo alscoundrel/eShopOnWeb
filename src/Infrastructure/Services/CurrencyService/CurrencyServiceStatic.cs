@@ -1,5 +1,6 @@
 ﻿using ApplicationCore.Interfaces;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Threading;
 using System.Threading.Tasks;
 using static ApplicationCore.Interfaces.ICurrencyService;
@@ -11,8 +12,7 @@ namespace Infrastructure.Services
 
 
         public Task<decimal> Convert(decimal value, Currency source, Currency target, CancellationToken cancellationToken = default(CancellationToken))
-        {
-
+        {            
             Dictionary<string, decimal> rats = new Dictionary<string, decimal>();
             rats.Add("USD", 1.00m);
             rats.Add("EUR", 1.99m);
