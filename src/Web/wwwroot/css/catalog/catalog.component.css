@@ -63,6 +63,16 @@
     background-color: #4a760f;
     transition: all 0.35s; }
 
+.esh-catalog-mode {
+  width: 24px;
+  color: #FFFFFF;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: all 0.35s; }
+  .esh-catalog-mode:hover {
+    background-color: rgba(255, 255, 255, 0.5);
+    transition: all 0.35s; }
+
 .esh-catalog-items {
   margin-top: 1rem; }
 
@@ -84,7 +94,7 @@
   max-width: 370px;
   width: 100%; }
 
-.esh-catalog-button {
+.esh-catalog-button, .esh-catalog-button-expanded {
   background-color: #83D01B;
   border: 0;
   color: #FFFFFF;
@@ -92,14 +102,14 @@
   font-size: 1rem;
   height: 3rem;
   margin-top: 1rem;
-  transition: all 0.35s;
-  width: 80%; }
-  .esh-catalog-button.is-disabled {
+  transition: all 0.35s}
+  .esh-catalog-button.is-disabled, .esh-catalog-button-expanded.is-disabled {
     opacity: .5;
     pointer-events: none; }
-  .esh-catalog-button:hover {
+  .esh-catalog-button:hover, .esh-catalog-button-expanded:hover {
     background-color: #4a760f;
     transition: all 0.35s; }
+    .esh-catalog-button{width: 80%;}
 
 .esh-catalog-name {
   font-size: 1rem;

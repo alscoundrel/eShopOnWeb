@@ -9,7 +9,7 @@
     </div>
 </section>
 <section class="esh-catalog-filters">
-    <div class="container">
+    <div class="container" style="position:relative;">
         <form method="get">
             <label class="esh-catalog-label" data-title="brand">
                 <select asp-for="@Model.CatalogModel.BrandFilterApplied" asp-items="@Model.CatalogModel.Brands" class="esh-catalog-filter"></select>
@@ -18,46 +18,56 @@
                 <select asp-for="@Model.CatalogModel.TypesFilterApplied" asp-items="@Model.CatalogModel.Types" class="esh-catalog-filter"></select>
             </label>
             <input class="esh-catalog-send" type="image" src="images/arrow-right.svg" />
+
+            <div style="position:absolute;right: 0;top: 36px;">
+                <span>View Mode:</span>
+                <input id="iptViewModel" type="hidden" asp-for="@Model.CatalogModel.ViewMode" value="" />
+                @{
+                    var GalleryClick = Model.CatalogModel.ViewMode == ViewsModes.Gallery?"return false;":"document.getElementById('iptViewModel').value = 'Gallery'";
+                    var ListClick    = Model.CatalogModel.ViewMode == ViewsModes.List?"return false;":"document.getElementById('iptViewModel').value = 'List'";
+                    var TableClick   = Model.CatalogModel.ViewMode == ViewsModes.Table?"return false;":"document.getElementById('iptViewModel').value = 'Table'";
+                }
+                <input class="esh-catalog-mode" type="image" src="images/gallery_items.png" onclick="@GalleryClick"/>
+                <input class="esh-catalog-mode" type="image" src="images/list_items.png" onclick="@ListClick"/>
+                <input class="esh-catalog-mode" type="image" src="images/table_items.png" onclick="@TableClick"/>
+            </div>
         </form>
     </div>
 </section>
 <div class="container">
-    <form method="get">
-        <div>
-            I want to see:
-            <select name="displayMode">
-                <option value="gallery">Gallery</option>
-                <option value="list">List</option>
-                <option value="table">Table</option>
-            </select>
-            &nbsp;
-            <input type="submit" value="Submit" />
-        </div>
-    </form>
 
-    @{
-        var vista = "grid";
-        var method = Request.Method;
-        if(method == "GET"){
-            var f = Request;
-        //    vista = Request.Form["displayMode"].ToString();
-        //    vista = r["displayMode"];
-        }
-    }
     @if (Model.CatalogModel.CatalogItems.Any())
     {
-        <partial name="_pagination" for="CatalogModel.PaginationInfo" />
 
-        @switch (vista)
-        {
-            case "grid":
-                <partial name="DisplayItems/_displayGallery"/>
-                break;
-            default:
-                <partial name="DisplayItems/_displayList"/>
-                break;
+
+        @* <partial name="_pagination" for="CatalogModel.PaginationInfo" /> *@
+        @await Html.PartialAsync("_pagination", Model.CatalogModel.PaginationInfo);
+
+        if(Model.CatalogModel.ViewMode == ViewsModes.Table){
+            <partial name="DisplayItems/_displayTable" for="CatalogModel.CatalogItems"/>
         }
-        
+        else if(Model.CatalogModel.ViewMode == ViewsModes.List){
+            Func<dynamic, object> listTemplate = @<partial name="DisplayItems/_productList" for="@item"/>;
+            var listItemViewModel = new SampleItemViewModel(){
+                Items = Model.CatalogModel.CatalogItems,
+                Template = listTemplate,
+                Ordered = false,
+                ListClass = "ListClass",
+                ListItemClass = "ListItemClass"
+            };
+            <partial name="DisplayItems/_displayList" for="@listItemViewModel"/>
+        }
+        else{
+            Func<dynamic, object> listTemplate = @<partial name="DisplayItems/_product" for="@item"/>;
+            var listItemViewModel = new SampleItemViewModel(){
+                Items = Model.CatalogModel.CatalogItems,
+                Template = listTemplate,
+                ListClass = "esh-catalog-items row",
+                ListItemClass = "esh-catalog-item col-md-4"
+            };
+            <partial name="DisplayItems/_displayGallery" for="@listItemViewModel"/>
+        }
+
 
         <partial name="_pagination" for="CatalogModel.PaginationInfo" />
     }

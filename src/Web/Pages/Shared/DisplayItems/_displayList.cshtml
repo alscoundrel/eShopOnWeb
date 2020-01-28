@@ -1,8 +1,24 @@
-﻿<div class="">
-	@foreach (var catalogItem in Model.CatalogModel.CatalogItems)
-	{
-		<div class="">
-			<partial name="_product" for="@catalogItem" />
-		</div>
-	}
-</div>
+﻿@model SampleItemViewModel
+
+@if(Model.Ordered){
+	<ol class="@Model.ListClass">
+		@foreach (var catalogItem in Model.Items)
+		{
+			<li class="@Model.ListItemClass">
+				@* <partial name="DisplayItems/_product" for="@catalogItem" /> *@
+				@Model.Template(catalogItem)
+			</li>
+		}
+	</ol>
+}
+else{
+	<ul class="@Model.ListClass">
+		@foreach (var catalogItem in Model.Items)
+		{
+			<li class="@Model.ListItemClass">
+				@* <partial name="DisplayItems/_product" for="@catalogItem" /> *@
+				@Model.Template(catalogItem)
+			</li>
+		}
+	</ul>
+}
