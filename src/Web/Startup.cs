@@ -10,12 +10,10 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.eShopWeb.ApplicationCore.Interfaces;
-using Microsoft.eShopWeb.ApplicationCore.Services;
 using Microsoft.eShopWeb.Infrastructure.Data;
 using Microsoft.eShopWeb.Infrastructure.Identity;
 using Microsoft.eShopWeb.Infrastructure.Logging;
 using Microsoft.eShopWeb.Infrastructure.Services;
-using Microsoft.eShopWeb.Web.Interfaces;
 using Microsoft.eShopWeb.Web.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -24,6 +22,7 @@ using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Mime;
 using Web.Extensions;
@@ -119,11 +118,21 @@ namespace Microsoft.eShopWeb.Web
             }
 
             services.AddScoped(typeof(IAsyncRepository<>), typeof(EfRepository<>));
-            services.AddCurrencyServices(Configuration);
             services.AddCatalogServices(Configuration);
             
             services.AddScoped(typeof(IAppLogger<>), typeof(LoggerAdapter<>));
             services.AddTransient<IEmailSender, EmailSender>();
+
+            // validate ExchangeRatesUSD.json file
+            var appsettingsFile = "ExchangeRatesUSD.json";
+            if(!File.Exists(appsettingsFile)){
+                throw new FileNotFoundException("File «appsettings.json» not founded");
+            }
+            var configurationBuilder = new ConfigurationBuilder();
+            configurationBuilder.AddJsonFile(appsettingsFile);
+            configurationBuilder.AddEnvironmentVariables();
+            var configuration = configurationBuilder.Build();
+            services.AddSingleton<IConfiguration>(configuration);
 
             // Add memory cache services
             services.AddMemoryCache();

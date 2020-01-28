@@ -1,11 +1,9 @@
-using System;
 using System.Collections.Generic;
 using System.Globalization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Localization.Routing;
 using Microsoft.Extensions.Configuration;
-using Web.Middleware;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Web.Extensions.Middleware
