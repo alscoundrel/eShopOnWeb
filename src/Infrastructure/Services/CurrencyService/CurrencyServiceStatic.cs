@@ -1,6 +1,7 @@
 ﻿using ApplicationCore.Interfaces;
 using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Threading;
 using System.Threading.Tasks;
 using static ApplicationCore.Interfaces.ICurrencyService;
@@ -33,10 +34,11 @@ namespace Infrastructure.Services
                 return Task.FromResult(value*rat); // TODO: miss implementation
             }
             else{
-                var sourceRate = decimal.Parse(sourceRateString);
-                var targetRate = decimal.Parse(targetRateString);
-                if(targetRate == 0){ throw new System.Exception("Invalid target rate value");}
-                return Task.FromResult(value*(sourceRate/targetRate));
+                var sourceRate = decimal.Parse(sourceRateString, CultureInfo.InvariantCulture);
+                var targetRate = decimal.Parse(targetRateString, CultureInfo.InvariantCulture);
+                if(targetRate == 0){ throw new ServicesException("Invalid target rate value");}
+                
+                return Task.FromResult((decimal) value*(sourceRate/targetRate));
             }
 
         }
