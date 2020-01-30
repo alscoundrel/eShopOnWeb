@@ -23,15 +23,16 @@ namespace Microsoft.eShopWeb.Web.Pages.Admin
         }
 
         public CatalogIndexViewModel CatalogModel { get; set; } = new CatalogIndexViewModel();
+        public CatalogPageFiltersViewModel CatalogPageModel {get; set;} = new CatalogPageFiltersViewModel();
 
-        public async Task OnGet(CatalogIndexViewModel catalogModel, int? pageId)
+        public async Task OnGet(CatalogPageFiltersViewModel catalogPageModel, int? pageId)
         {
-            var culture = CultureInfo.CurrentCulture.Name;
-            var cacheKey = CacheHelpers.GenerateCatalogItemCacheKey(pageId.GetValueOrDefault(), Constants.ITEMS_PER_PAGE, culture, catalogModel.BrandFilterApplied, catalogModel.TypesFilterApplied);
+            var cacheKey = CacheHelpers.GenerateCatalogItemCacheKey(catalogPageModel);
 
             _cache.Remove(cacheKey);
 
-            CatalogModel = await _catalogViewModelService.GetCatalogItems(pageId.GetValueOrDefault(), Constants.ITEMS_PER_PAGE, catalogModel.BrandFilterApplied, catalogModel.TypesFilterApplied);
+            CatalogModel = await _catalogViewModelService.GetCatalogItems(catalogPageModel, false);
+            CatalogPageModel = catalogPageModel;
         }
     }
 }

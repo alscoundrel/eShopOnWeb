@@ -55,26 +55,26 @@ namespace Microsoft.eShopWeb.Web.Services
             user_price_unit = CultureServiceUser.FindCurrency(default_price_unit);
         }
 
-        private async Task<CatalogItemViewModel> CreateCatalogItemViewModel(CatalogItem catalogItem, CancellationToken cancellationToken = default(CancellationToken)){
+        private async Task<CatalogItemViewModel> CreateCatalogItemViewModel(CatalogItem catalogItem, bool convertPrice, CancellationToken cancellationToken = default(CancellationToken)){
             return new CatalogItemViewModel()
                 {
                     Id = catalogItem.Id,
                     Name = catalogItem.Name,
                     PictureUri = catalogItem.PictureUri,
-                    Price = await _currencyService.Convert(catalogItem.Price, default_price_unit, user_price_unit, cancellationToken),
+                    Price = await (convertPrice?_currencyService.Convert(catalogItem.Price, default_price_unit, user_price_unit, cancellationToken):Task.FromResult(catalogItem.Price)),
                     ShowPrice = catalogItem.ShowPrice,
                     PriceUnit = user_price_unit,
                     PriceSymbol = CultureInfo.CurrentCulture.NumberFormat.CurrencySymbol
                 };
         }
 
-        public async Task<CatalogIndexViewModel> GetCatalogItems(int pageIndex, int itemsPage, int? brandId, int? typeId, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<CatalogIndexViewModel> GetCatalogItems(CatalogPageFiltersViewModel catalogPageFiltersViewModel, bool convertPrice = false, CancellationToken cancellationToken = default(CancellationToken))
         {
             _logger.LogInformation("GetCatalogItems called.");
 
-            var filterSpecification = new CatalogFilterSpecification(brandId, typeId);
+            var filterSpecification = new CatalogFilterSpecification(catalogPageFiltersViewModel.BrandFilter, catalogPageFiltersViewModel.TypesFilter, catalogPageFiltersViewModel.SearchTextFilter);
             var filterPaginatedSpecification =
-                new CatalogFilterPaginatedSpecification(itemsPage * pageIndex, itemsPage, brandId, typeId);
+                new CatalogFilterPaginatedSpecification(catalogPageFiltersViewModel.ItemsPerPage * catalogPageFiltersViewModel.PageId, catalogPageFiltersViewModel.ItemsPerPage, catalogPageFiltersViewModel.SearchTextFilter, catalogPageFiltersViewModel.OrderBy, catalogPageFiltersViewModel.Ordination, catalogPageFiltersViewModel.BrandFilter, catalogPageFiltersViewModel.TypesFilter);
 
             // the implementation below using ForEach and Count. We need a List.
             var itemsOnPage = await _itemRepository.ListAsync(filterPaginatedSpecification);
@@ -85,7 +85,7 @@ namespace Microsoft.eShopWeb.Web.Services
                 itemOnPage.PictureUri = _uriComposer.ComposePicUri(itemOnPage.PictureUri);
             }
 
-            var catalogItemsTask = await Task.WhenAll(itemsOnPage.Select(catalogItem => CreateCatalogItemViewModel(catalogItem, cancellationToken)));
+            var catalogItemsTask = await Task.WhenAll(itemsOnPage.Select(catalogItem => CreateCatalogItemViewModel(catalogItem, convertPrice, cancellationToken)));
             // em caso de algures haver um cancelamento o código para aqui e devolve um erro. Escusa de proceguir no processamento
             cancellationToken.ThrowIfCancellationRequested();
 
@@ -94,14 +94,14 @@ namespace Microsoft.eShopWeb.Web.Services
                 CatalogItems = catalogItemsTask,
                 Brands = await GetBrands(cancellationToken),
                 Types = await GetTypes(cancellationToken),
-                BrandFilterApplied = brandId ?? 0,
-                TypesFilterApplied = typeId ?? 0,
+                //BrandFilterApplied = catalogPageFiltersViewModel.BrandFilter ?? 0,
+                //TypesFilterApplied = catalogPageFiltersViewModel.TypesFilter ?? 0,
                 PaginationInfo = new PaginationInfoViewModel()
                 {
-                    ActualPage = pageIndex,
+                    ActualPage = catalogPageFiltersViewModel.PageId,
                     ItemsPerPage = itemsOnPage.Count,
                     TotalItems = totalItems,
-                    TotalPages = int.Parse(Math.Ceiling(((decimal)totalItems / itemsPage)).ToString())
+                    TotalPages = int.Parse(Math.Ceiling(((decimal)totalItems / catalogPageFiltersViewModel.ItemsPerPage)).ToString())
                 }
             };
 
@@ -145,6 +145,21 @@ namespace Microsoft.eShopWeb.Web.Services
             }
 
             return items;
+        }
+
+        public async Task<CatalogItemViewModel> GetItemById(int idItem, CancellationToken cancellationToken = default)
+        {
+            try
+            {
+                var item = await _itemRepository.GetByIdAsync(idItem);
+                if(null == item){ throw new ModelNotFoundException($"Catalog item not found. id={idItem}"); }
+                return await CreateCatalogItemViewModel(item, true, cancellationToken);
+            }
+            catch (Exception ex)
+            {
+                
+                throw new ModelNotFoundException($"Catalog item not found. id={idItem}", ex);
+            }
         }
     }
 }

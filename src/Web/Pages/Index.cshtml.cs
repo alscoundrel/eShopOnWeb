@@ -15,11 +15,23 @@ namespace Microsoft.eShopWeb.Web.Pages
         }
 
         public CatalogIndexViewModel CatalogModel { get; set; } = new CatalogIndexViewModel();
+        public CatalogPageFiltersViewModel CatalogPageModel {get; set;} = new CatalogPageFiltersViewModel();
 
-        public async Task OnGet(CatalogIndexViewModel catalogModel, int? pageId)
+        public async Task OnGet(CatalogPageFiltersViewModel catalogPageModel, int? pageId)//CatalogIndexViewModel catalogModel
         {
-            CatalogModel = await _catalogViewModelService.GetCatalogItems(pageId ?? 0, Constants.ITEMS_PER_PAGE, catalogModel.BrandFilterApplied, catalogModel.TypesFilterApplied);
-            CatalogModel.ViewMode = catalogModel.ViewMode;
+            /*
+            var catalogPageFiltersViewModel = new CatalogPageFiltersViewModel(){
+                PageId = pageId??0,
+                ItemsPerPage = Constants.ITEMS_PER_PAGE,
+                BrandFilter = catalogModel.BrandFilterApplied,
+                TypesFilter = catalogModel.TypesFilterApplied,
+                SearchTextFilter = catalogModel.SearchTextFilter,
+                OrderBy = catalogModel.OrderBy,
+                Ordination = catalogModel.Ordination
+            };
+            */
+            CatalogModel = await _catalogViewModelService.GetCatalogItems(catalogPageModel, true);
+            CatalogPageModel = catalogPageModel;
         }
     }
 }

@@ -16,9 +16,9 @@ namespace Microsoft.eShopWeb.UnitTests
         [InlineData(null, 3, 1)]
         [InlineData(1, 3, 1)]
         [InlineData(2, 3, 0)]
-        public void MatchesExpectedNumberOfItems(int? brandId, int? typeId, int expectedCount)
+        public void MatchesExpectedNumberOfItems(int? brandId, int? typeId, string termFind, int expectedCount)
         {
-            var spec = new CatalogFilterSpecification(brandId, typeId);
+            var spec = new CatalogFilterSpecification(brandId, typeId, termFind);
 
             var result = GetTestItemCollection()
                 .AsQueryable()

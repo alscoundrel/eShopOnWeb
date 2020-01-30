@@ -30,15 +30,19 @@ namespace Microsoft.eShopWeb.Web.Services
                     });
         }
 
-        public async Task<CatalogIndexViewModel> GetCatalogItems(int pageIndex, int itemsPage, int? brandId, int? typeId, CancellationToken cancelattionToken = default(CancellationToken))
+        public async Task<CatalogItemViewModel> GetItemById(int idItem, CancellationToken cancellationToken = default)
         {
-            var culture = CultureInfo.CurrentCulture.Name;
-            var cacheKey = CacheHelpers.GenerateCatalogItemCacheKey(pageIndex, Constants.ITEMS_PER_PAGE, culture, brandId, typeId);
+            return await _catalogViewModelService.GetItemById(idItem, cancellationToken);
+        }
+
+        public async Task<CatalogIndexViewModel> GetCatalogItems(CatalogPageFiltersViewModel catalogPageFiltersViewModel, bool convertPrice = false, CancellationToken cancelattionToken = default(CancellationToken))
+        {
+            var cacheKey = CacheHelpers.GenerateCatalogItemCacheKey(catalogPageFiltersViewModel);
 
             return await _cache.GetOrCreateAsync(cacheKey, async entry =>
             {
                 entry.SlidingExpiration = CacheHelpers.DefaultCacheDuration;
-                return await _catalogViewModelService.GetCatalogItems(pageIndex, itemsPage, brandId, typeId, cancelattionToken);
+                return await _catalogViewModelService.GetCatalogItems(catalogPageFiltersViewModel, convertPrice, cancelattionToken);
             });
         }
 
