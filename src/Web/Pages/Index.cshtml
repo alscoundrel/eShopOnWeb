@@ -12,25 +12,35 @@
     <div class="container" style="position:relative;">
         <form method="get">
             <label class="esh-catalog-label" data-title="brand">
-                <select asp-for="@Model.CatalogModel.BrandFilterApplied" asp-items="@Model.CatalogModel.Brands" class="esh-catalog-filter"></select>
+                <select asp-for="@Model.CatalogPageModel.BrandFilter" asp-items="@Model.CatalogModel.Brands" class="esh-catalog-filter"></select>
             </label>
             <label class="esh-catalog-label" data-title="type">
-                <select asp-for="@Model.CatalogModel.TypesFilterApplied" asp-items="@Model.CatalogModel.Types" class="esh-catalog-filter"></select>
+                <select asp-for="@Model.CatalogPageModel.TypesFilter" asp-items="@Model.CatalogModel.Types" class="esh-catalog-filter"></select>
             </label>
+            <input type="text" asp-for="@Model.CatalogPageModel.SearchTextFilter" />
+            <input type="text" asp-for="@Model.CatalogPageModel.OrderBy" value="Name"/>
+            <input type="text" asp-for="@Model.CatalogPageModel.Ordination" value="1"/>
             <input class="esh-catalog-send" type="image" src="images/arrow-right.svg" />
 
             <div style="position:absolute;right: 0;top: 36px;">
                 <span>View Mode:</span>
-                <input id="iptViewModel" type="hidden" asp-for="@Model.CatalogModel.ViewMode" value="" />
+                <input id="iptViewModel" type="hidden" asp-for="@Model.CatalogPageModel.ViewMode" />
                 @{
-                    var GalleryClick = Model.CatalogModel.ViewMode == ViewsModes.Gallery?"return false;":"document.getElementById('iptViewModel').value = 'Gallery'";
-                    var ListClick    = Model.CatalogModel.ViewMode == ViewsModes.List?"return false;":"document.getElementById('iptViewModel').value = 'List'";
-                    var TableClick   = Model.CatalogModel.ViewMode == ViewsModes.Table?"return false;":"document.getElementById('iptViewModel').value = 'Table'";
+                    var GalleryClick = Model.CatalogPageModel.ViewMode == ViewsModes.Gallery?"return false;":"document.getElementById('iptViewModel').value = 'Gallery'";
+                    var ListClick    = Model.CatalogPageModel.ViewMode == ViewsModes.List?"return false;":"document.getElementById('iptViewModel').value = 'List'";
+                    var TableClick   = Model.CatalogPageModel.ViewMode == ViewsModes.Table?"return false;":"document.getElementById('iptViewModel').value = 'Table'";
                 }
                 <input class="esh-catalog-mode" type="image" src="images/gallery_items.png" onclick="@GalleryClick"/>
                 <input class="esh-catalog-mode" type="image" src="images/list_items.png" onclick="@ListClick"/>
                 <input class="esh-catalog-mode" type="image" src="images/table_items.png" onclick="@TableClick"/>
             </div>
+            @{
+                @* set pageid (page number - 1) *@
+                var pageId = Model.HttpContext.Request.Query["pageId"].ToString();
+                if(!string.IsNullOrEmpty(pageId) && pageId!="0"){
+                    <input type="hidden" name="pageid" value="@pageId"/>
+                }
+            }
         </form>
     </div>
 </section>
@@ -43,10 +53,10 @@
         @* <partial name="_pagination" for="CatalogModel.PaginationInfo" /> *@
         @await Html.PartialAsync("_pagination", Model.CatalogModel.PaginationInfo);
 
-        if(Model.CatalogModel.ViewMode == ViewsModes.Table){
+        if(Model.CatalogPageModel.ViewMode == ViewsModes.Table){
             <partial name="DisplayItems/_displayTable" for="CatalogModel.CatalogItems"/>
         }
-        else if(Model.CatalogModel.ViewMode == ViewsModes.List){
+        else if(Model.CatalogPageModel.ViewMode == ViewsModes.List){
             Func<dynamic, object> listTemplate = @<partial name="DisplayItems/_productList" for="@item"/>;
             var listItemViewModel = new SampleItemViewModel(){
                 Items = Model.CatalogModel.CatalogItems,

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.eShopWeb.ApplicationCore.Interfaces;
@@ -28,6 +29,7 @@ using System.Net.Mime;
 using Web.Extensions;
 using Web.Extensions.Middleware;
 
+[assembly : ApiConventionType(typeof(DefaultApiConventions))]
 namespace Microsoft.eShopWeb.Web
 {
     public class Startup
@@ -48,17 +50,6 @@ namespace Microsoft.eShopWeb.Web
         public IConfiguration Configuration { get; }
 
         public void ConfigureDevelopmentServices(IServiceCollection services)
-        {
-            if(_webHostEnvironment.IsDevelopment()){
-                // use in-memory database
-                ConfigureInMemoryDatabases(services);
-            } else {
-                // use real database
-                ConfigureProductionServices(services);
-            }
-        }
-
-        private void ConfigureInMemoryDatabases(IServiceCollection services)
         {
             // use in-memory database
             services.AddDbContext<CatalogContext>(c =>
@@ -86,11 +77,17 @@ namespace Microsoft.eShopWeb.Web
             ConfigureServices(services);
         }
 
-        public void ConfigureTestingServices(IServiceCollection services)
+        public void ConfigureStagingServices(IServiceCollection services)
         {
-            ConfigureInMemoryDatabases(services);
+            ConfigureProductionServices(services);
         }
 
+        public void ConfigureTestingServices(IServiceCollection services)
+        {
+            ConfigureDevelopmentServices(services);
+        }
+
+        #region My environments
         /// <summary>
         /// Estas funções são chamadas por convenção Configure<Ambiente>Services()
         /// </summary>
@@ -98,6 +95,12 @@ namespace Microsoft.eShopWeb.Web
         public void ConfigureAzureServices(IServiceCollection services){
             ConfigureProductionServices(services);
         }
+
+        public void ConfigureCasaServices(IServiceCollection services){
+            ConfigureProductionServices(services);
+        }
+        #endregion
+
 
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -109,12 +112,12 @@ namespace Microsoft.eShopWeb.Web
 
             services.AddMediatR(typeof(BasketViewModelService).Assembly);
 
-            if(_webHostEnvironment.EnvironmentName == "Azure" || _webHostEnvironment.IsDevelopment()){
-                //services.AddSingleton<ICurrencyService, CurrencyServiceStatic>();
+            if(_webHostEnvironment.IsProduction()){
+                //services.AddSingleton<ICurrencyService, CurrencyServiceExternal>();
                 services.AddSingleton<ICurrencyService, CurrencyServiceExchangeRates>();
             }
             else{
-                services.AddSingleton<ICurrencyService, CurrencyServiceExternal>();
+                services.AddSingleton<ICurrencyService, CurrencyServiceStatic>();
             }
 
             services.AddScoped(typeof(IAsyncRepository<>), typeof(EfRepository<>));
@@ -126,7 +129,7 @@ namespace Microsoft.eShopWeb.Web
             // validate ExchangeRatesUSD.json file
             var appsettingsFile = "ExchangeRatesUSD.json";
             if(!File.Exists(appsettingsFile)){
-                throw new FileNotFoundException("File «appsettings.json» not founded");
+                throw new FileNotFoundException("File «ExchangeRatesUSD.json» not founded");
             }
             var configurationBuilder = new ConfigurationBuilder();
             configurationBuilder.AddJsonFile(appsettingsFile);
@@ -237,7 +240,7 @@ namespace Microsoft.eShopWeb.Web
                 });
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
+                //app.UseDeveloperExceptionPage();
                 app.UseShowAllServicesMiddleware();
                 app.UseDatabaseErrorPage();
             }

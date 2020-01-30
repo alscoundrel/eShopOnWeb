@@ -12,10 +12,10 @@
     <div class="container">
         <form method="get">
             <label class="esh-catalog-label" data-title="brand">
-                <select asp-for="@Model.CatalogModel.BrandFilterApplied" asp-items="@Model.CatalogModel.Brands" class="esh-catalog-filter"></select>
+                <select asp-for="@Model.CatalogPageModel.BrandFilter" asp-items="@Model.CatalogModel.Brands" class="esh-catalog-filter"></select>
             </label>
             <label class="esh-catalog-label" data-title="type">
-                <select asp-for="@Model.CatalogModel.TypesFilterApplied" asp-items="@Model.CatalogModel.Types" class="esh-catalog-filter"></select>
+                <select asp-for="@Model.CatalogPageModel.TypesFilter" asp-items="@Model.CatalogModel.Types" class="esh-catalog-filter"></select>
             </label>
             <input class="esh-catalog-send" type="image" src="images/arrow-right.svg" />
         </form>
