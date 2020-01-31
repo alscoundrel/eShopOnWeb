@@ -3,7 +3,7 @@
 @{
 	IDictionary<string, string> buildQueryStringDict(int page) {
 		var queryStringDict = Context.Request.Query.ToDictionary(x => x.Key, x => x.Value.ToString());
-		queryStringDict["pageid"] = page.ToString();
+		queryStringDict["CatalogPageModel.PageId"] = page.ToString();
 		return queryStringDict;
 	}
 }

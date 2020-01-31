@@ -15,7 +15,7 @@ namespace Microsoft.eShopWeb.UnitTests.Web.Extensions.CacheHelpersTests
 
             var result = CacheHelpers.GenerateCatalogItemCacheKey(catalogPageFiltersViewModel);
 
-            Assert.Equal("items-0-10--", result);
+            Assert.Equal("items-0-9------", result);
         }
     }
 }

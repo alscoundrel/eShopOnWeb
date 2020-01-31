@@ -17,6 +17,8 @@
             <label class="esh-catalog-label" data-title="type">
                 <select asp-for="@Model.CatalogPageModel.TypesFilter" asp-items="@Model.CatalogModel.Types" class="esh-catalog-filter"></select>
             </label>
+            
+            <input type="text" name="SearchTextFilterPrevious" value="" />
             <input type="text" asp-for="@Model.CatalogPageModel.SearchTextFilter" />
             <input type="text" asp-for="@Model.CatalogPageModel.OrderBy" value="Name"/>
             <input type="text" asp-for="@Model.CatalogPageModel.Ordination" value="1"/>
@@ -36,9 +38,15 @@
             </div>
             @{
                 @* set pageid (page number - 1) *@
-                var pageId = Model.HttpContext.Request.Query["pageId"].ToString();
-                if(!string.IsNullOrEmpty(pageId) && pageId!="0"){
-                    <input type="hidden" name="pageid" value="@pageId"/>
+                if(0 < Model.CatalogPageModel.PageId){
+                    <input type="hidden" asp-for="@Model.CatalogPageModel.PageId"/>
+                }
+            }
+            @{
+                @* reserve culture property *@
+                var culture = Model.HttpContext.Request.Query["culture"].ToString();
+                if(!string.IsNullOrEmpty(culture)){
+                    <input type="text" name="culture" value="@culture"/>
                 }
             }
         </form>

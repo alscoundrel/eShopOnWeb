@@ -25,7 +25,7 @@ namespace Microsoft.eShopWeb.FunctionalTests.Web.Controllers
             var stringResponse = await response.Content.ReadAsStringAsync();
             var model = JsonConvert.DeserializeObject<CatalogIndexViewModel>(stringResponse);
 
-            Assert.Equal(10, model.CatalogItems.Count());
+            Assert.Equal(9, model.CatalogItems.Count());
         }
 
         [Fact]
@@ -36,7 +36,7 @@ namespace Microsoft.eShopWeb.FunctionalTests.Web.Controllers
             var stringResponse = await response.Content.ReadAsStringAsync();
             var model = JsonConvert.DeserializeObject<CatalogIndexViewModel>(stringResponse);
 
-            Assert.Equal(2, model.CatalogItems.Count());
+            Assert.Equal(3, model.CatalogItems.Count());
         }
     }
 }

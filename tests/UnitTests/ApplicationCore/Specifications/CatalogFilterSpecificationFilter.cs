@@ -9,13 +9,13 @@ namespace Microsoft.eShopWeb.UnitTests
     public class CatalogFilterSpecificationFilter
     {
         [Theory]
-        [InlineData(null, null, 5)]
-        [InlineData(1, null, 3)]
-        [InlineData(2, null, 2)]
-        [InlineData(null, 1, 2)]
-        [InlineData(null, 3, 1)]
-        [InlineData(1, 3, 1)]
-        [InlineData(2, 3, 0)]
+        [InlineData(null, null, null, 5)]
+        [InlineData(1, null, null, 3)]
+        [InlineData(2, null, null, 2)]
+        [InlineData(null, 1, null, 2)]
+        [InlineData(null, 3, null, 1)]
+        [InlineData(1, 3, null, 1)]
+        [InlineData(2, 3, ".NET", 0)]
         public void MatchesExpectedNumberOfItems(int? brandId, int? typeId, string termFind, int expectedCount)
         {
             var spec = new CatalogFilterSpecification(brandId, typeId, termFind);
