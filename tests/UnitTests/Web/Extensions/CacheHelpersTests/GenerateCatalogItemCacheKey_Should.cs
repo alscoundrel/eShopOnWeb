@@ -1,6 +1,4 @@
-﻿using System.Globalization;
-using Microsoft.eShopWeb.Web;
-using Microsoft.eShopWeb.Web.Extensions;
+﻿using Microsoft.eShopWeb.Web.Extensions;
 using Microsoft.eShopWeb.Web.ViewModels;
 using Xunit;
 

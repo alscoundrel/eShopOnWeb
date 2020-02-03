@@ -33,7 +33,7 @@ namespace Microsoft.eShopWeb.ApplicationCore.Specifications
         public CatalogFilterSpecification(int? brandId, int? typeId, string term)
             : base(i => (!brandId.HasValue || i.CatalogBrandId == brandId) &&
                 (!typeId.HasValue || i.CatalogTypeId == typeId) &&
-                (string.IsNullOrEmpty(term) || i.Name.Contains(term))) // no caso de usar M. SQL SERVER
+                (string.IsNullOrEmpty(term) || i.Name.Contains(term))) // no caso de usar M. SQL SERVER, etc
                 // (string.IsNullOrEmpty(term) || i.Name.Contains(term, System.StringComparison.InvariantCultureIgnoreCase)); // em memoria
         {
         }
