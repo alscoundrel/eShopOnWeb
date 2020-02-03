@@ -23,10 +23,11 @@ namespace Microsoft.eShopWeb.Web.Pages
         public CatalogPageFiltersViewModel CatalogPageModel {get; set;} = new CatalogPageFiltersViewModel();
 
         public async Task OnGet(CatalogPageFiltersViewModel catalogPageModel, int? pageId)//CatalogIndexViewModel catalogModel
-        {
-            if(0 < catalogPageModel.PageId && ChangedSearchTextAsync(catalogPageModel.SearchTextFilter)){
-                catalogPageModel.PageId = 0;
-            }
+        {   
+            // Para o caso de o pedido de busca por termo estiver fora da pagina inicial
+            // if(0 < catalogPageModel.PageId && ChangedSearchTextAsync(catalogPageModel.SearchTextFilter)){
+            //     catalogPageModel.PageId = 0;
+            // }
             
             CatalogModel = await _catalogViewModelService.GetCatalogItems(catalogPageModel, true);
             CatalogPageModel = catalogPageModel;
@@ -34,6 +35,7 @@ namespace Microsoft.eShopWeb.Web.Pages
 
         private bool ChangedSearchTextAsync(string searchText){
             var previous = searchText;
+            // verifica se temos o valor em cache
             if(_cache.TryGetValue<string>(PREVIOUS_SEARCH_TEXT, out previous)){
                 if(previous == null && searchText == null){ return false;}
                 if(previous.Equals(searchText, System.StringComparison.CurrentCultureIgnoreCase)){ return false;}

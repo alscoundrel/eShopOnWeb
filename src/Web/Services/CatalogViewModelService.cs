@@ -77,9 +77,9 @@ namespace Microsoft.eShopWeb.Web.Services
                 new CatalogFilterPaginatedSpecification(catalogPageFiltersViewModel.ItemsPerPage * catalogPageFiltersViewModel.PageId, catalogPageFiltersViewModel.ItemsPerPage, catalogPageFiltersViewModel.SearchTextFilter, catalogPageFiltersViewModel.OrderBy, catalogPageFiltersViewModel.Ordination, catalogPageFiltersViewModel.BrandFilter, catalogPageFiltersViewModel.TypesFilter);
 
             // the implementation below using ForEach and Count. We need a List.
-            var itemsOnPage = await _itemRepository.ListAsync(filterPaginatedSpecification);
             var totalItems = await _itemRepository.CountAsync(filterSpecification);
-
+            var itemsOnPage = await _itemRepository.ListAsync(filterPaginatedSpecification);
+        
             foreach (var itemOnPage in itemsOnPage)
             {
                 itemOnPage.PictureUri = _uriComposer.ComposePicUri(itemOnPage.PictureUri);
