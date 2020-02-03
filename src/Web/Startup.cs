@@ -133,6 +133,7 @@ namespace Microsoft.eShopWeb.Web
             }
             var configurationBuilder = new ConfigurationBuilder();
             configurationBuilder.AddJsonFile(appsettingsFile);
+            configurationBuilder.AddConfiguration(Configuration);
             configurationBuilder.AddEnvironmentVariables();
             var configuration = configurationBuilder.Build();
             services.AddSingleton<IConfiguration>(configuration);
@@ -157,6 +158,22 @@ namespace Microsoft.eShopWeb.Web
             {
                 options.Conventions.AuthorizePage("/Basket/Checkout");
             });
+
+            services.AddAuthentication()
+                .AddGoogle(options =>{
+                    var googleAuthNSection = Configuration.GetSection("Authentication:Google");
+
+                    options.ClientId = googleAuthNSection["ClientId"];
+                    options.ClientSecret = googleAuthNSection["ClientSecret"];
+                })
+                .AddFacebook(facebookOptions =>
+                {
+                    var facebookAuthNSection = Configuration.GetSection("Authentication:Facebook");
+                    facebookOptions.AppId = facebookAuthNSection["AppId"];
+                    facebookOptions.AppSecret = facebookAuthNSection["AppSecret"];
+                })
+            ;
+
             services.AddControllersWithViews();
 
             services.AddHttpContextAccessor();
