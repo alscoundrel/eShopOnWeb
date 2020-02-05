@@ -1,0 +1,83 @@
+﻿@model IndexModel
+
+@{
+    IDictionary<string, string> buildQueryStringDict(string key, string value) {
+		var queryStringDict = Context.Request.Query
+                                        .Where(x => x.Key.ToString()!="icf")
+                                        .Where(x => x.Key.ToString()!="Culture")
+                                        .Where(x => x.Key.ToString()!="culture")
+                                        .ToDictionary(x => x.Key, x => x.Value.ToString());
+		queryStringDict[key] = value;
+		return queryStringDict;
+	}
+}
+
+    <div class="container" style="position:relative;">
+        <form method="get">
+            @{
+                var OnChanged = "document.getElementById('iptChangedFilters').value=true";
+            }
+            <label class="esh-catalog-label" data-title="brand">
+                <select asp-for="@Model.CatalogPageModel.BrandFilter" asp-items="@Model.CatalogModel.Brands" class="esh-catalog-filter"  onchange="@OnChanged"></select>
+            </label>
+            <label class="esh-catalog-label" data-title="type">
+                <select asp-for="@Model.CatalogPageModel.TypesFilter" asp-items="@Model.CatalogModel.Types" class="esh-catalog-filter" onchange="@OnChanged"></select>
+            </label>
+            <label class="esh-catalog-label" data-title="Sort By">
+                <select asp-for="@Model.CatalogPageModel.OrderBy" asp-items="@Model.CatalogModel.OrdersBy" class="esh-catalog-filter" onchange="@OnChanged"></select>
+            </label>
+            <label class="esh-catalog-label" data-title="Order">
+                <select asp-for="@Model.CatalogPageModel.Order" asp-items="@Model.CatalogModel.Orders" class="esh-catalog-filter" onchange="@OnChanged"></select>
+            </label>
+
+            <input type="text" asp-for="@Model.CatalogPageModel.SearchTextFilter" onchange="@OnChanged"/>
+            @* <input type="text" asp-for="@Model.CatalogPageModel.OrderBy" onchange="@OnChanged"/>
+            <input type="text" asp-for="@Model.CatalogPageModel.Order" onchange="@OnChanged"/> *@
+
+            <input type="hidden" id="iptChangedFilters" name="icf" value="false">
+            <input class="esh-catalog-send" type="image" src="images/arrow-right.svg" />
+
+            <div style="position:absolute;right: 0;top: 36px;">
+                <span>View Mode:</span>
+                <input id="iptViewModel" type="hidden" asp-for="@Model.CatalogPageModel.ViewMode" />
+                @{
+                    var GalleryClick = Model.CatalogPageModel.ViewMode == ViewsModes.Gallery?"return false;":"document.getElementById('iptViewModel').value = 'Gallery'";
+                    var ListClick    = Model.CatalogPageModel.ViewMode == ViewsModes.List?"return false;":"document.getElementById('iptViewModel').value = 'List'";
+                    var TableClick   = Model.CatalogPageModel.ViewMode == ViewsModes.Table?"return false;":"document.getElementById('iptViewModel').value = 'Table'";
+                }
+                <input class="esh-catalog-mode" type="image" src="images/gallery_items.png" onclick="@GalleryClick"/>
+                <input class="esh-catalog-mode" type="image" src="images/list_items.png" onclick="@ListClick"/>
+                <input class="esh-catalog-mode" type="image" src="images/table_items.png" onclick="@TableClick"/>
+            </div>
+            @{
+                @* set pageid (page number - 1) *@
+                if(0 < Model.CatalogPageModel.PageId){
+                    <input type="hidden" asp-for="@Model.CatalogPageModel.PageId"/>
+                }
+            }
+            @{
+                @* reserve culture property *@
+                var culture = Model.HttpContext.Request.Query["culture"].ToString();
+                if(!string.IsNullOrEmpty(culture)){
+                    <input type="hidden" name="culture" value="@culture"/>
+                }
+
+                var reference = "Culture";
+                var pt = "pt-PT";
+                var us = "en.US";
+                var gb = "en-GB";
+            }
+
+            <div style="position:absolute;right:0;top: 5px;">
+                	<a class="" id="PT" asp-all-route-data="@buildQueryStringDict(reference, pt)" aria-label="PT">
+                        <img src="images/flags/icon_PT.png">
+                    </a>
+                    <a class="" id="US" asp-all-route-data="@buildQueryStringDict(reference, us)" aria-label="US">
+                        <img src="images/flags/icon_US.png">
+                    </a>
+                    <a class="" id="GB" asp-all-route-data="@buildQueryStringDict(reference, gb)" aria-label="GB">
+                        <img src="images/flags/icon_GB.png">
+                    </a>
+            </div>
+        </form>
+    </div>

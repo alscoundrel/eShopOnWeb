@@ -8,6 +8,8 @@ namespace Microsoft.eShopWeb.Web.ViewModels
         public IEnumerable<CatalogItemViewModel> CatalogItems { get; set; }
         public IEnumerable<SelectListItem> Brands { get; set; }
         public IEnumerable<SelectListItem> Types { get; set; }
+        public IEnumerable<SelectListItem> OrdersBy { get; set; }
+        public IEnumerable<SelectListItem> Orders { get; set; }
         public PaginationInfoViewModel PaginationInfo { get; set; }
     }
 }

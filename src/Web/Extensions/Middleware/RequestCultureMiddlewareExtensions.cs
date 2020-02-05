@@ -34,6 +34,7 @@ namespace Web.Extensions.Middleware
                 new CookieRequestCultureProvider(),
                 new RouteDataRequestCultureProvider() { Options = options } 
             };
+            options.RequestCultureProviders.Insert(0, new RouteDataRequestCultureProvider());
             app.UseRequestLocalization(options);
             
         }

@@ -74,7 +74,7 @@ namespace Microsoft.eShopWeb.Web.Services
 
             var filterSpecification = new CatalogFilterSpecification(catalogPageFiltersViewModel.BrandFilter, catalogPageFiltersViewModel.TypesFilter, catalogPageFiltersViewModel.SearchTextFilter);
             var filterPaginatedSpecification =
-                new CatalogFilterPaginatedSpecification(catalogPageFiltersViewModel.ItemsPerPage * catalogPageFiltersViewModel.PageId, catalogPageFiltersViewModel.ItemsPerPage, catalogPageFiltersViewModel.SearchTextFilter, catalogPageFiltersViewModel.OrderBy, catalogPageFiltersViewModel.Ordination, catalogPageFiltersViewModel.BrandFilter, catalogPageFiltersViewModel.TypesFilter);
+                new CatalogFilterPaginatedSpecification(catalogPageFiltersViewModel.ItemsPerPage * catalogPageFiltersViewModel.PageId, catalogPageFiltersViewModel.ItemsPerPage, catalogPageFiltersViewModel.SearchTextFilter, catalogPageFiltersViewModel.OrderBy, catalogPageFiltersViewModel.Order, catalogPageFiltersViewModel.BrandFilter, catalogPageFiltersViewModel.TypesFilter);
 
             // the implementation below using ForEach and Count. We need a List.
             var totalItems = await _itemRepository.CountAsync(filterSpecification);

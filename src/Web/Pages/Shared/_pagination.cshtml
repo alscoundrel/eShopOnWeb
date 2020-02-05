@@ -1,11 +1,16 @@
 ﻿@model PaginationInfoViewModel
 
 @{
-	IDictionary<string, string> buildQueryStringDict(int page) {
-		var queryStringDict = Context.Request.Query.ToDictionary(x => x.Key, x => x.Value.ToString());
-		queryStringDict["CatalogPageModel.PageId"] = page.ToString();
+
+	IDictionary<string, string> buildQueryStringDict(string key, string value) {
+		var queryStringDict = Context.Request.Query.Where(x => x.Key.ToString()!="icf").ToDictionary(x => x.Key, x => x.Value.ToString());
+		queryStringDict[key] = value;
 		return queryStringDict;
 	}
+
+	var reference = "CatalogPageModel.PageId";
+	var previous = (Model.ActualPage - 1).ToString();
+	var next     = (Model.ActualPage + 1).ToString();
 }
 
 <div class="esh-pager">
@@ -13,12 +18,7 @@
 		<article class="esh-pager-wrapper row">
 			<nav>
 				<div class="col-md-2 col-xs-12">
-					<a class="esh-pager-item-left esh-pager-item--navigable esh-pager-item @Model.Previous"
-					   id="Previous"
-					   asp-all-route-data="@buildQueryStringDict(Model.ActualPage - 1)"
-					   aria-label="Previous">
-						Previous
-					</a>
+					<a class="esh-pager-item-left esh-pager-item--navigable esh-pager-item @Model.Previous" id="Previous" asp-all-route-data="@buildQueryStringDict(reference, previous)" aria-label="Previous">Previous</a>
 				</div>
 				
 				<div class="col-md-8 col-xs-12">
@@ -28,12 +28,7 @@
 				</div>
 		        
 				<div class="col-md-2 col-xs-12">
-					<a class="esh-pager-item-right esh-pager-item--navigable esh-pager-item @Model.Next"
-					   id="Next"
-					   asp-all-route-data="@buildQueryStringDict(Model.ActualPage + 1)"
-					   aria-label="Next">
-						Next
-					</a>
+					<a class="esh-pager-item-right esh-pager-item--navigable esh-pager-item @Model.Next" id="Next" asp-all-route-data="@buildQueryStringDict(reference, next)" aria-label="Next">Next</a>
 				</div>
 			</nav>
 		</article>

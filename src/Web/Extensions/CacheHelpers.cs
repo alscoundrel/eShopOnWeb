@@ -12,7 +12,7 @@ namespace Microsoft.eShopWeb.Web.Extensions
         {
             string searchTerms = string.IsNullOrEmpty(catalogPageFiltersViewModel.SearchTextFilter)?"":catalogPageFiltersViewModel.SearchTextFilter.Replace(" ", "");
             return string.Format(_itemsKeyTemplate, catalogPageFiltersViewModel.PageId, catalogPageFiltersViewModel.ItemsPerPage, catalogPageFiltersViewModel.Culture, catalogPageFiltersViewModel.BrandFilter, catalogPageFiltersViewModel.TypesFilter, searchTerms, 
-            catalogPageFiltersViewModel.OrderBy, catalogPageFiltersViewModel.Ordination);
+            catalogPageFiltersViewModel.OrderBy, catalogPageFiltersViewModel.Order.ToString());
         }
 
         public static string GenerateBrandsCacheKey()

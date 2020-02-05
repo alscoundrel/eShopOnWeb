@@ -1,7 +1,14 @@
 ﻿@page
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+
 @{
     ViewData["Title"] = "Catalog";
     @model IndexModel
+}
+<P>@Localizer["Hello"]</P>
+@{
+    var c = System.Globalization.CultureInfo.CurrentCulture;
 }
 <section class="esh-catalog-hero">
     <div class="container">
@@ -9,52 +16,7 @@
     </div>
 </section>
 <section class="esh-catalog-filters">
-    <div class="container" style="position:relative;">
-        <form method="get">
-            @{
-                var OnChanged = "document.getElementById('iptChangedFilters').value=1";
-            }
-            <label class="esh-catalog-label" data-title="brand">
-                <select asp-for="@Model.CatalogPageModel.BrandFilter" asp-items="@Model.CatalogModel.Brands" class="esh-catalog-filter"  onchange="@OnChanged"></select>
-            </label>
-            <label class="esh-catalog-label" data-title="type">
-                <select asp-for="@Model.CatalogPageModel.TypesFilter" asp-items="@Model.CatalogModel.Types" class="esh-catalog-filter" onchange="@OnChanged"></select>
-            </label>
-            
-            <input type="text" asp-for="@Model.CatalogPageModel.SearchTextFilter" onchange="@OnChanged"/>
-            <input type="text" asp-for="@Model.CatalogPageModel.OrderBy" value="Name" onchange="@OnChanged"/>
-            <input type="text" asp-for="@Model.CatalogPageModel.Ordination" value="1" onchange="@OnChanged"/>
-
-            <input type="text" id="iptChangedFilters" name="icf" value="0">
-            <input class="esh-catalog-send" type="image" src="images/arrow-right.svg" />
-
-            <div style="position:absolute;right: 0;top: 36px;">
-                <span>View Mode:</span>
-                <input id="iptViewModel" type="hidden" asp-for="@Model.CatalogPageModel.ViewMode" />
-                @{
-                    var GalleryClick = Model.CatalogPageModel.ViewMode == ViewsModes.Gallery?"return false;":"document.getElementById('iptViewModel').value = 'Gallery'";
-                    var ListClick    = Model.CatalogPageModel.ViewMode == ViewsModes.List?"return false;":"document.getElementById('iptViewModel').value = 'List'";
-                    var TableClick   = Model.CatalogPageModel.ViewMode == ViewsModes.Table?"return false;":"document.getElementById('iptViewModel').value = 'Table'";
-                }
-                <input class="esh-catalog-mode" type="image" src="images/gallery_items.png" onclick="@GalleryClick"/>
-                <input class="esh-catalog-mode" type="image" src="images/list_items.png" onclick="@ListClick"/>
-                <input class="esh-catalog-mode" type="image" src="images/table_items.png" onclick="@TableClick"/>
-            </div>
-            @{
-                @* set pageid (page number - 1) *@
-                if(0 < Model.CatalogPageModel.PageId){
-                    <input type="hidden" asp-for="@Model.CatalogPageModel.PageId"/>
-                }
-            }
-            @{
-                @* reserve culture property *@
-                var culture = Model.HttpContext.Request.Query["culture"].ToString();
-                if(!string.IsNullOrEmpty(culture)){
-                    <input type="hideen" name="culture" value="@culture"/>
-                }
-            }
-        </form>
-    </div>
+    <partial name="_catalogPageFilters" for="@Model"/>
 </section>
 <div class="container">
 
