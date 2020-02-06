@@ -25,7 +25,7 @@ namespace Microsoft.eShopWeb.Web.Controllers.Api
             return Ok(catalogModel);
         }
         
-       [HttpGet("{idItem}")]
+        [HttpGet("{idItem}")]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
         public async Task<ActionResult<CatalogItemViewModel>> GetById(int idItem) {
             try  {
