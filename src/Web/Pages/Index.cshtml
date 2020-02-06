@@ -1,15 +1,20 @@
 ﻿@page
-@using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
 
 @{
+    @* IDictionary<string, string> buildQueryStringDict() {
+		var queryStringDict = Context.Request.Query.ToDictionary(x => x.Key, x => x.Value.ToString());
+		return queryStringDict;
+	} *@
+
     ViewData["Title"] = "Catalog";
     @model IndexModel
 }
-<P>@Localizer["Hello"]</P>
 @{
-    var c = System.Globalization.CultureInfo.CurrentCulture;
+    var href = $"/reports/pdf/catalog{HttpContext.Request.QueryString.ToString()}";
 }
+
+<P>@Localizer["Hello"]</P>
 <section class="esh-catalog-hero">
     <div class="container">
         <img class="esh-catalog-title" src="~/images/main_banner_text.png" />
@@ -26,6 +31,8 @@
 
         @* <partial name="_pagination" for="CatalogModel.PaginationInfo" /> *@
         @await Html.PartialAsync("_pagination", Model.CatalogModel.PaginationInfo);
+        @* <a href="/pdf/" target="_blank"><img src="images/document/icon_pdf_64.png"></a> *@
+        <a href="@href" target="_blank"><img src="images/document/icon_pdf_64.png"></a>
 
         if(Model.CatalogPageModel.ViewMode == ViewsModes.Table){
             <partial name="DisplayItems/_displayTable" for="CatalogModel.CatalogItems"/>
