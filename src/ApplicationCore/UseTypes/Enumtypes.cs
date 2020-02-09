@@ -12,4 +12,9 @@ namespace ApplicationCore.UseTypes
         Name,
         Price
     }
+
+    public enum MediaOptions{
+        EMail,
+        SMS
+    }
 }

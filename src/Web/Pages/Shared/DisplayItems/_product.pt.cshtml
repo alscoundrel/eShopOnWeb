@@ -22,5 +22,10 @@
             <span>"Sob Consulta"</span>
         }
     </div>
-
 </form>
+@if(User.Identity.IsAuthenticated && Model.ShowPrice) 
+{
+    <form asp-page="/WishList/Index" method="post">
+        <input type="image" src="images/wish_64.png" style="width:34px;position:relative;top:-34px;right:-142px;"/>
+    </form>
+}
