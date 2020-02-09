@@ -5,7 +5,6 @@ using Microsoft.eShopWeb.Web.Extensions;
 using Microsoft.eShopWeb.Web.Services;
 using Microsoft.eShopWeb.Web.ViewModels;
 using Microsoft.Extensions.Caching.Memory;
-using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -27,9 +26,15 @@ namespace Microsoft.eShopWeb.Web.Pages
         public CatalogIndexViewModel CatalogModel { get; set; } = new CatalogIndexViewModel();
         public CatalogPageFiltersViewModel CatalogPageModel {get; set;} = new CatalogPageFiltersViewModel();
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="catalogPageModel">User catalog filters</param>
+        /// <param name="icf">if changed any filters</param>
+        /// <param name="culture">parse culture information</param>
+        /// <returns></returns>
         public async Task OnGet(CatalogPageFiltersViewModel catalogPageModel, bool icf, string culture)//CatalogIndexViewModel catalogModel
-        {   
-            var ci = CultureInfo.CurrentCulture;
+        {
             // Para o caso de o pedido de busca por termo estiver fora da pagina inicial
             if(0 < catalogPageModel.PageId && icf){
                 catalogPageModel.PageId = 0;

@@ -17,16 +17,16 @@
             @{
                 var OnChanged = "document.getElementById('iptChangedFilters').value=true";
             }
-            <label class="esh-catalog-label" data-title="brand">
+            <label class="esh-catalog-label" data-title="marca">
                 <select asp-for="@Model.CatalogPageModel.BrandFilter" asp-items="@Model.CatalogModel.Brands" class="esh-catalog-filter"  onchange="@OnChanged"></select>
             </label>
-            <label class="esh-catalog-label" data-title="type">
+            <label class="esh-catalog-label" data-title="tipo">
                 <select asp-for="@Model.CatalogPageModel.TypesFilter" asp-items="@Model.CatalogModel.Types" class="esh-catalog-filter" onchange="@OnChanged"></select>
             </label>
-            <label class="esh-catalog-label" data-title="Sort By">
+            <label class="esh-catalog-label" data-title="Ordenar por">
                 <select asp-for="@Model.CatalogPageModel.OrderBy" asp-items="@Model.CatalogModel.OrdersBy" class="esh-catalog-filter" onchange="@OnChanged"></select>
             </label>
-            <label class="esh-catalog-label" data-title="Order">
+            <label class="esh-catalog-label" data-title="Ordem">
                 <select asp-for="@Model.CatalogPageModel.Order" asp-items="@Model.CatalogModel.Orders" class="esh-catalog-filter" onchange="@OnChanged"></select>
             </label>
 
@@ -38,7 +38,7 @@
             <input class="esh-catalog-send" type="image" src="images/arrow-right.svg" />
 
             <div style="position:absolute;right: 0;top: 36px;">
-                <span>View Mode:</span>
+                <span>Visualização:</span>
                 <input id="iptViewModel" type="hidden" asp-for="@Model.CatalogPageModel.ViewMode" />
                 @{
                     var GalleryClick = Model.CatalogPageModel.ViewMode == ViewsModes.Gallery?"return false;":"document.getElementById('iptViewModel').value = 'Gallery'";
