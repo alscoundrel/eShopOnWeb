@@ -2,11 +2,6 @@
 @inject IViewLocalizer Localizer
 
 @{
-    @* IDictionary<string, string> buildQueryStringDict() {
-		var queryStringDict = Context.Request.Query.ToDictionary(x => x.Key, x => x.Value.ToString());
-		return queryStringDict;
-	} *@
-
     ViewData["Title"] = "Catalog";
     @model IndexModel
 }
