@@ -27,5 +27,10 @@
 {
     <form asp-page="/WishList/Index" method="post">
         <input type="image" src="images/wish_64.png" style="width:34px;position:relative;top:-34px;right:-142px;"/>
+        <input type="hidden" asp-for="@Model.Id" name="id" />
+        <input type="hidden" asp-for="@Model.Name" name="name" />
+        <input type="hidden" asp-for="@Model.PictureUri" name="pictureUri" />
+        <input type="hidden" asp-for="@Model.Price" name="price" />
+        <input type="hidden" asp-for="@Model.PriceSymbol" name="priceSymbol" />
     </form>
 }

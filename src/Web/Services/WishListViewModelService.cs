@@ -25,9 +25,64 @@ namespace Microsoft.eShopWeb.Web.Services
             _itemRepository = itemRepository;
         }
 
-        public Task<WishListViewModel> GetOrCreateWishListForUser(string userName)
+        public async Task<WishListViewModel> GetOrCreateWishListForUser(string userName)
         {
-            throw new System.NotImplementedException();
+            var wishListSpec = new WishListWithItemsSpecification(userName);
+            var wishList = (await _wishListRepository.ListAsync(wishListSpec)).FirstOrDefault();
+
+            if (wishList == null)
+            {
+                return await CreateWishListForUser(userName);
+            }
+            return await CreateViewModelFromWishList(wishList);
+        }
+
+        public async Task<WishListViewModel> CreateWishListForUser(string userId){
+            var wishList = new WishList() { WisherId = userId };
+            await _wishListRepository.AddAsync(wishList);
+
+            return new WishListViewModel()
+            {
+                WisherId = wishList.WisherId,
+                Id = wishList.Id,
+                Items = new List<WishListItemViewModel>()
+            };
+        }
+
+        public async Task<WishListViewModel> CreateViewModelFromWishList(WishList wishList){
+            var viewModel = new WishListViewModel();
+            viewModel.Id = wishList.Id;
+            viewModel.WisherId = wishList.WisherId;
+            viewModel.WishName = wishList.WishName;
+            viewModel.Items = await GetWishListItems(wishList.Items); ;
+            return viewModel;
+        }
+
+        private async Task<List<WishListItemViewModel>> GetWishListItems(IReadOnlyCollection<WishItem> wishItems)
+        {
+            var items = new List<WishListItemViewModel>();
+            foreach (var item in wishItems)
+            {
+                var itemModel = new WishListItemViewModel
+                {
+                    Id = item.Id,
+                    UnitPrice = item.UnitPrice,
+                    Quantity = item.Quantity,
+                    CatalogItemId = item.CatalogItemId,
+                    PriceSymbol = item.PriceSymbol,
+                    NotifyCasePriceChanges = item.NotifyCasePriceChanges,
+                    NotifyWhenAvailable = item.NotifyWhenAvailable,
+                    NotifyChoice = item.NotifyChoice,
+                    WishDate = item.WishDate
+
+                };
+                var catalogItem = await _itemRepository.GetByIdAsync(item.CatalogItemId);
+                itemModel.PictureUrl = _uriComposer.ComposePicUri(catalogItem.PictureUri);
+                itemModel.ProductName = catalogItem.Name;
+                items.Add(itemModel);
+            }
+
+            return items;
         }
     }
 }

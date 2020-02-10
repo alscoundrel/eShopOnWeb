@@ -13,7 +13,7 @@ namespace Microsoft.eShopWeb.ApplicationCore.Entities.WishListAggregate
         private readonly List<WishItem> _items = new List<WishItem>();
         public IReadOnlyCollection<WishItem> Items => _items.AsReadOnly();
 
-        public void AddItem(int catalogItemId, decimal unitPrice, int quantity = 1)
+        public void AddItem(int catalogItemId, decimal unitPrice, string priceSymbol, int quantity = 1)
         {
             if (!Items.Any(i => i.CatalogItemId == catalogItemId))
             {
@@ -22,7 +22,8 @@ namespace Microsoft.eShopWeb.ApplicationCore.Entities.WishListAggregate
                     WishId = this.WisherId,
                     CatalogItemId = catalogItemId,
                     Quantity = quantity,
-                    UnitPrice = unitPrice
+                    UnitPrice = unitPrice,
+                    PriceSymbol = priceSymbol
                 });
                 return;
             }

@@ -1,0 +1,10 @@
+﻿@model SampleWishListItemViewModel
+
+<div class="@Model.ListClass">
+	@foreach (var WishItem in Model.Items)
+	{
+		<div class="@Model.ListItemClass">
+			@Model.Template(WishItem)
+		</div>
+	}
+</div>

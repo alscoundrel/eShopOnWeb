@@ -12,6 +12,7 @@ namespace Microsoft.eShopWeb.ApplicationCore.Entities.WishListAggregate
         public bool NotifyWhenAvailable {get; set;} = true;
         public MediaOptions NotifyChoice {get; set;} = MediaOptions.EMail;
         public decimal UnitPrice { get; set; }
+        public string PriceSymbol { get; set; }
         public int Quantity { get; set; }
         public int CatalogItemId { get; set; }
     }

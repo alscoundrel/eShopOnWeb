@@ -152,7 +152,7 @@ namespace Microsoft.eShopWeb.Web
             services.AddLocalization(options => options.ResourcesPath = "Resources");
 
             // The following line enables Application Insights telemetry collection.
-            services.AddApplicationInsightsTelemetry();
+            //services.AddApplicationInsightsTelemetry();
 
             
             services.AddMvc(options =>

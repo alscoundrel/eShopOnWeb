@@ -20,14 +20,19 @@ namespace Microsoft.eShopWeb.ApplicationCore.Services
             _logger = logger;
         }
 
-        public Task AddItemToWishList(int wishListId, int catalogItemId, decimal price, int quantity = 1)
+        public async Task AddItemToWishList(int wishListId, int catalogItemId, decimal price, string priceSymbol, int quantity = 1)
         {
-            throw new System.NotImplementedException();
+            var wishList = await _wishListRepository.GetByIdAsync(wishListId);
+
+            wishList.AddItem(catalogItemId, price, priceSymbol, quantity);
+
+            await _wishListRepository.UpdateAsync(wishList);
         }
 
-        public Task DeleteWishListAsync(int wishListId)
+        public async Task DeleteWishListAsync(int wishListId)
         {
-            throw new System.NotImplementedException();
+            var wishList = await _wishListRepository.GetByIdAsync(wishListId);
+            await _wishListRepository.DeleteAsync(wishList);
         }
 
         public Task<int> GetWishListItemCountAsync(string userName)
@@ -35,9 +40,26 @@ namespace Microsoft.eShopWeb.ApplicationCore.Services
             throw new System.NotImplementedException();
         }
 
+        public async Task SetNotifies(int wishListId, int catalogItemId, bool notifyCasePriceChanges)
+        {
+            //Guard.Against.Null(notifyCasePriceChanges, nameof(notifyCasePriceChanges));
+            var WishList = await _wishListRepository.GetByIdAsync(wishListId);
+            var WishItem = WishList.Items.Where(i => i.CatalogItemId == catalogItemId ).FirstOrDefault();
+            WishItem.NotifyCasePriceChanges = notifyCasePriceChanges;
+            await _wishListRepository.UpdateAsync(WishList);
+        }
+
+
         public Task SetQuantities(int wishListId, Dictionary<string, int> quantities)
         {
             throw new System.NotImplementedException();
+        }
+
+        public async Task SetWishName(int wishListId, string wishName)
+        {
+            var WishList = await _wishListRepository.GetByIdAsync(wishListId);
+            WishList.WishName = wishName;
+            await _wishListRepository.UpdateAsync(WishList);
         }
     }
 }

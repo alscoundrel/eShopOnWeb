@@ -10,5 +10,48 @@
 </section>
 
 <div class="container">
-        WishList
+
+    @if (Model.WishListModel.Items.Any())
+    {
+        <h3>My Wish List</h3>
+        <form method="POST">
+            <div class="row">
+                <div class="col-md-1"><input type="checkbox" name="checkDelete"></div>
+                <div class="col-md-2">
+                    <button class="btn esh-basket-checkout2" name="updatebutton" value="" type="submit" asp-page-handler="Delete">
+                        [ Delete ]
+                    </button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-1">Name</div>
+                <div calss="col-md-2"><input type="text" asp-for="@Model.WishListModel.WishName" name="wishName"/></div>
+                <div class="col-md-2">
+                    <input type="hidden" asp-for="@Model.WishListModel.Id" name="catalogItemId" />
+                    <button class="btn esh-basket-checkout2" name="updatebutton" value="" type="submit" asp-page-handler="UpdateName">
+                        [ Update ]
+                    </button>
+                </div>
+            </div>
+        </form>
+
+        Func<dynamic, object> listTemplate = @<partial name="WishList/_product" for="@item"/>;
+        var wishListItemViewModel = new SampleWishListItemViewModel(){
+            Items = Model.WishListModel.Items,
+            Template = listTemplate,
+            ListClass = "esh-catalog-items row",
+            ListItemClass = "esh-catalog-item col-md-4"
+        };
+        <partial name="WishList/_displayGallery" for="@wishListItemViewModel"/>
+    }
+    else{
+        <h3 class="esh-catalog-items row">
+            Wish List is empty.
+        </h3>
+        
+
+    }   
+    <section class="esh-basket-item">
+        <a asp-page="/Index" class="btn esh-basket-checkout text-white">[ Continue Shopping..]</a>
+    </section>
 </div>

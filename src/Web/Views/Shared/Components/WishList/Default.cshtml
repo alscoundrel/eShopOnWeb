@@ -1,0 +1,15 @@
+﻿@model WishListComponentViewModel
+
+@{
+    ViewData["Title"] = "My Wish List";
+}
+@if(0 < Model.ItemsCount){
+    <a class="esh-election" asp-page="/WishList/Index">
+        <div class="esh-election-image">
+            <img src="~/images/wish_64.png" />
+        </div>
+        <div class="esh-election-badge">
+            @Model.ItemsCount
+        </div>
+    </a>
+}

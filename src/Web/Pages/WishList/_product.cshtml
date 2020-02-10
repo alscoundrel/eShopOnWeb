@@ -1,0 +1,33 @@
+﻿@model WishListItemViewModel
+
+<div>
+    <img class="esh-catalog-thumbnail" src="@Model.PictureUrl" />
+    <form asp-page="/Basket/Index" method="post">
+        <input class="esh-catalog-button" type="submit" value="[ ADD TO BASKET ]" />
+        <input type="hidden" asp-for="@Model.CatalogItemId" name="id" />
+        <input type="hidden" asp-for="@Model.ProductName" name="name" />
+        <input type="hidden" asp-for="@Model.PictureUrl" name="pictureUri" />
+        <input type="hidden" asp-for="@Model.UnitPrice" name="price" />
+    </form>
+    <div class="esh-catalog-name">
+        <span>@Model.ProductName</span>
+    </div>
+    <div class="esh-catalog-price">
+        <span class="product-price">@Model.UnitPrice.ToString("N2")</span>
+        <span class="product-price-unit">@Model.PriceSymbol</span>
+    </div>
+    <div class="row">
+        <div class="col-md-12"><span>Desired in @Model.WishDate.ToString("yyyy-MM-dd HH:mm")</span></div>
+    </div>
+
+    <form method="POST">
+        <div class="row">
+            <div class="col-md-10"><b>Notify Case Price Changes</b></div>
+            <div class="col-md-2"><input type="checkbox" asp-for="@Model.NotifyCasePriceChanges" name="NotifyCasePriceChanges"/></div>
+        </div>
+        <input type="hidden" asp-for="@Model.CatalogItemId" name="catalogItemId" />
+        <button class="btn esh-basket-checkout2" name="updatebutton" value="" type="submit" asp-page-handler="Update">
+            [ Update ]
+        </button>
+    </form>
+</div>

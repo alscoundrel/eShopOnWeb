@@ -9,6 +9,7 @@ namespace Microsoft.eShopWeb.Web.Pages.WishList
         public int Id { get; set; }
         public List<WishListItemViewModel> Items { get; set; } = new List<WishListItemViewModel>();
         public string WisherId { get; set; }
+        public string WishName { get; set;}
 
         public decimal Total()
         {

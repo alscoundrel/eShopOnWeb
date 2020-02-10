@@ -54,7 +54,6 @@ namespace Microsoft.eShopWeb.Web.Pages.Basket
         {
             await SetBasketModelAsync();
             await _basketService.SetQuantities(BasketModel.Id, items);
-
             await SetBasketModelAsync();
         }
 
