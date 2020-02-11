@@ -34,7 +34,7 @@
 </head>
 <body>
         <div class="container">
-
+            <div style="text-align:center;"><h2>Catalog Online</h2></div>
             @if (Model.CatalogModel.CatalogItems.Any())
             {
 
@@ -74,10 +74,8 @@
         <footer class="container">
             <div class="row">
                 <div class="col-md-2"><h6>@date</h6></div>
-                <div class="col-md-3"></div>
-                <div class="col-md-2">eShopOnWeb</div>
-                <div class="col-md-3"></div>
-                <div class="col-md-2">Pag. @(Model.CatalogModel.PaginationInfo.ActualPage + 1) / @Model.CatalogModel.PaginationInfo.TotalPages</div>
+                <div class="col-md-7"></div>
+                <div class="col-md-3">&copy; @date.Year eShopOnWeb.com</div>
             </div>
         </footer>
 </body>

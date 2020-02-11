@@ -101,7 +101,8 @@ namespace Microsoft.eShopWeb.Web.Services
                     ActualPage = catalogPageFiltersViewModel.PageId,
                     ItemsPerPage = itemsOnPage.Count,
                     TotalItems = totalItems,
-                    TotalPages = int.Parse(Math.Ceiling(((decimal)totalItems / catalogPageFiltersViewModel.ItemsPerPage)).ToString())
+                    TotalPages =  catalogPageFiltersViewModel.ItemsPerPage == 0 ? 1 : 
+                                  int.Parse(Math.Ceiling(((decimal)totalItems / catalogPageFiltersViewModel.ItemsPerPage)).ToString())
                 }
             };
 

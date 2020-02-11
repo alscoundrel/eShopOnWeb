@@ -12,7 +12,8 @@ namespace Microsoft.eShopWeb.ApplicationCore.Specifications
         public CatalogFilterPaginatedSpecification(int skip, int take, string term, NamesOrderBy? orderBy, Ordination ordination, int? brandId, int? typeId)
             : base(brandId, typeId, term)
         {
-            ApplyPaging(skip, take);
+            // return all if take == 0
+            if(0 < take){ ApplyPaging(skip, take);}
             //ApplyOrderBy(i => i.Name);
             // if(!string.IsNullOrEmpty(orderBy)){
             //     Expression<Func<CatalogItem, object>> expr = x => x.GetType().GetProperty(orderBy).GetValue(x, null);

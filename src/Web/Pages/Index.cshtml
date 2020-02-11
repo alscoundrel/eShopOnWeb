@@ -25,8 +25,9 @@
 
         @* <partial name="_pagination" for="CatalogModel.PaginationInfo" /> *@
         @await Html.PartialAsync("_pagination", Model.CatalogModel.PaginationInfo);
-        @* <a href="/pdf/" target="_blank"><img src="images/document/icon_pdf_64.png"></a> *@
-        <a href="@href" target="_blank"><img src="images/document/icon_pdf_64.png"></a>
+        @if(Model.CatalogModel.PaginationInfo.ActualPage == 0){
+            <a href="@href" target="_blank"><img src="images/document/icon_pdf_64.png"></a>
+        }
 
         if(Model.CatalogPageModel.ViewMode == ViewsModes.Table){
             <partial name="DisplayItems/_displayTable" for="CatalogModel.CatalogItems"/>

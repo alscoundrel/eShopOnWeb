@@ -29,20 +29,15 @@ namespace Microsoft.eShopWeb.Web.Pages.Pdf
 
         public async Task OnGet(CatalogPageFiltersViewModel catalogPageModel, bool icf, string culture)//CatalogIndexViewModel catalogModel
         {   
-            var ci = CultureInfo.CurrentCulture;
-            // Para o caso de o pedido de busca por termo estiver fora da pagina inicial
-            if(0 < catalogPageModel.PageId && icf){
-                catalogPageModel.PageId = 0;
-            }
+            catalogPageModel.ItemsPerPage = 0;
+            catalogPageModel.PageId = 0;
+            
             if(!string.IsNullOrEmpty(culture)){
                 catalogPageModel.Culture = culture;
             }
             
             CatalogModel = await _catalogViewModelService.GetCatalogItems(catalogPageModel, true);
             CatalogPageModel = catalogPageModel;
-
-            CatalogModel.OrdersBy = Enum<NamesOrderBy>.GetAll().Select(orderBy => new SelectListItem { Value = orderBy.ToString(), Text = orderBy.ToString() });
-            CatalogModel.Orders = Enum<Ordination>.GetAll().Select(order => new SelectListItem { Value = order.ToString(), Text = order.ToString() });
         }
 
     }
