@@ -1,0 +1,11 @@
+{{ greeting }} dear,
+
+Your Wish is now with new features.
+
+{{ if PriceChanged }}
+"The catalog item has a different price."
+{{ end }}
+
+
+Happy shopping,
+The eShopOnWeb team

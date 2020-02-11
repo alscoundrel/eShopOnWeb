@@ -42,6 +42,7 @@
     <PackageReference Include="System.Json" Version="4.7.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="3.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Facebook" Version="3.0.0-preview-19075-0444" />
+    <PackageReference Include="Scriban.Signed" Version="2.1.1" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="wwwroot\fonts\" />
@@ -49,6 +50,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Resources\**" CopyToPublishDirectory="PreserveNewest" />
+    <Content Include="templates\**"> 
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory> 
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ApplicationCore\ApplicationCore.csproj" />
