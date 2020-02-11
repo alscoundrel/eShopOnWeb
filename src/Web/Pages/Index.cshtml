@@ -23,7 +23,6 @@
     @if (Model.CatalogModel.CatalogItems.Any())
     {
 
-
         @* <partial name="_pagination" for="CatalogModel.PaginationInfo" /> *@
         @await Html.PartialAsync("_pagination", Model.CatalogModel.PaginationInfo);
         @* <a href="/pdf/" target="_blank"><img src="images/document/icon_pdf_64.png"></a> *@

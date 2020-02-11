@@ -116,16 +116,17 @@ namespace Microsoft.eShopWeb.Web
             if(_webHostEnvironment.IsProduction()){
                 //services.AddSingleton<ICurrencyService, CurrencyServiceExternal>();
                 services.AddSingleton<ICurrencyService, CurrencyServiceExchangeRates>();
+                services.AddTransient<IEmailSender, EmailSender>();
             }
             else{
                 services.AddSingleton<ICurrencyService, CurrencyServiceStatic>();
+                services.AddTransient<IEmailSender, EmailSenderSendGrid>();
             }
 
             services.AddScoped(typeof(IAsyncRepository<>), typeof(EfRepository<>));
             services.AddCatalogServices(Configuration);
-            
             services.AddScoped(typeof(IAppLogger<>), typeof(LoggerAdapter<>));
-            services.AddTransient<IEmailSender, EmailSender>();
+            
 
             // validate ExchangeRatesUSD.json file
             var appsettingsFile = "ExchangeRatesUSD.json";
@@ -161,7 +162,7 @@ namespace Microsoft.eShopWeb.Web
                          new SlugifyParameterTransformer()));
 
             })
-                .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix)
+                .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix, opts => { opts.ResourcesPath = "Resources";})
                 .AddDataAnnotationsLocalization();
 
             services.AddRazorPages(options =>
