@@ -6,13 +6,17 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using SendGrid;
 using System.Net;
+using Microsoft.Extensions.Logging;
 
 namespace Microsoft.eShopWeb.Infrastructure.Services
 {
     public class EmailSenderSendGrid : IEmailSender
     {
+        private readonly ILogger<EmailSenderSendGrid> _logger;
         private IServiceProvider _serviceProvider;
-        public EmailSenderSendGrid(IServiceProvider serviceProvider){
+
+        public EmailSenderSendGrid(ILoggerFactory loggerFactory, IServiceProvider serviceProvider){
+            _logger = loggerFactory.CreateLogger<EmailSenderSendGrid>();
             _serviceProvider = serviceProvider;
         }
 
@@ -39,10 +43,14 @@ namespace Microsoft.eShopWeb.Infrastructure.Services
 
             var client = new SendGridClient(apiKeyString);
             var response = await client.SendEmailAsync(sendGridMessage);
-            if(response.StatusCode == HttpStatusCode.Accepted){}
-
-            else{ throw new Exception(response.ToString());}
-            // TODO: Wire this up to actual email sending logic via SendGrid, local SMTP, etc.
+            if(response.StatusCode == HttpStatusCode.Accepted){
+                _logger.LogInformation($"Send e-mail to {email} is accepted.");
+            }
+            else{
+                _logger.LogError($"Send e-mail to {email} is not accepted. {response.ToString()}");
+                throw new Exception(response.ToString());
+            }
+            // Wire this up to actual email sending logic via SendGrid, local SMTP, etc.
         }
     }
 }

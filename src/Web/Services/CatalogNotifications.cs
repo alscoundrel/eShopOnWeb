@@ -6,6 +6,7 @@ using Microsoft.eShopWeb.ApplicationCore.Specifications;
 using Microsoft.eShopWeb.Infrastructure.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Scriban;
 using Scriban.Runtime;
 using System;
@@ -25,20 +26,49 @@ namespace Microsoft.eShopWeb.Web.Services
         private readonly IAsyncRepository<WishList> _wishListRepository;
         private readonly IEmailSender _emailSender;
         private IServiceProvider _serviceProvider;
-        public CatalogNotifications(IAsyncRepository<CatalogItem> itemRepository, IAsyncRepository<WishList> wishListRepository, IEmailSender emailSender, SignInManager<ApplicationUser> signInManager, IServiceProvider serviceProvider){
+        private readonly ILogger<CatalogNotifications> _logger;
+
+        public CatalogNotifications(IAsyncRepository<CatalogItem> itemRepository, IAsyncRepository<WishList> wishListRepository, IEmailSender emailSender, SignInManager<ApplicationUser> signInManager, IServiceProvider serviceProvider, ILoggerFactory loggerFactory){
             _itemRepository = itemRepository;
             _wishListRepository = wishListRepository;
             _emailSender = emailSender;
             _signInManager = signInManager;
             _serviceProvider = serviceProvider;
+            _logger = loggerFactory.CreateLogger<CatalogNotifications>();
 
-            var configuration = _serviceProvider.GetRequiredService<IConfiguration>();
-            TemplateSubject = configuration.GetValue<string>("SendGrid:templateSubject");
-            TemplateBody = configuration.GetValue<string>("SendGrid:TemplateBody");
+            // var configuration = _serviceProvider.GetRequiredService<IConfiguration>();
+            // TemplateSubject = configuration.GetValue<string>("SendGrid:templateSubject");
+            // TemplateBody = configuration.GetValue<string>("SendGrid:TemplateBody");
+
+            new Action(async () => {await loadTemplatesDataAsync();}).Invoke();
         }
 
-        private string TemplateSubject;
-        private string TemplateBody;
+        private Template templateBody;
+        private Template templateSubject;
+        private string greeting = "Good morning";
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        private async Task loadTemplatesDataAsync(){
+            var configuration = _serviceProvider.GetRequiredService<IConfiguration>();
+            
+            // for email subject
+            var pathTemplateSubject    = configuration.GetValue<string>("SendGrid:templateSubject");
+            var templateContentSubject = await File.ReadAllTextAsync(pathTemplateSubject); 
+            templateSubject            = Template.Parse(templateContentSubject);
+
+            // for email message
+            var pathTemplateBody    = configuration.GetValue<string>("SendGrid:TemplateBody");
+            var templateContentBody = await File.ReadAllTextAsync(pathTemplateBody); 
+            templateBody            = Template.Parse(templateContentBody);
+
+            // greeting
+            int hour = DateTimeOffset.Now.Hour;
+            if(19 < hour){ greeting = "Good evening";}
+            else if(12 < hour){ greeting = "Good afternoon";}
+        }
 
         /// <summary>
         /// Catalog Item Notify
@@ -47,6 +77,8 @@ namespace Microsoft.eShopWeb.Web.Services
         /// <param name="priceChenged"></param>
         /// <returns></returns>
         public async Task CatalogItemsNotifyAsync(int itemId, decimal priceNew){
+            _logger.LogInformation("Inicialize catalog items notify...");
+
             var catalogItem = await _itemRepository.GetByIdAsync(itemId);
             var users = _signInManager.UserManager.Users.ToList();
             
@@ -81,24 +113,12 @@ namespace Microsoft.eShopWeb.Web.Services
             if(priceNew != catalogItem.Price){ anyChanges = true;}
 
             if(anyChanges){
-                // greeting
-                int hour = DateTimeOffset.Now.Hour;
-                var greeting = "Good morning";
-                if(19 < hour){ greeting = "Good evening";}
-                else if(12 < hour){ greeting = "Good afternoon";}
-
                 MemberRenamerDelegate memberRenamer = member => member.Name;
                 
                 //email subject
-                var templateContentSubject = await File.ReadAllTextAsync(TemplateSubject);
-                // Parse a scriban template
-                var templateSubject = Template.Parse(templateContentSubject);
                 var subject = templateSubject.Render(new { CatalogItem = catalogItem }, memberRenamer);
 
                 //email message
-                var templateContentBody = await File.ReadAllTextAsync(TemplateBody);
-                // Parse a scriban template
-                var templateBody = Template.Parse(templateContentBody);
                 var message = templateBody.Render(
                         new { Greeting =  greeting, PriceChanged = priceNew != catalogItem.Price}
                     );
