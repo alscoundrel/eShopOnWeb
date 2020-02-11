@@ -28,5 +28,18 @@ namespace Microsoft.eShopWeb.Web.Services
 
             await _catalogItemRepository.UpdateAsync(updatedCatalogItem);
         }
+
+        public async Task AddCatalogItem(CatalogItemViewModel viewModel)
+        {
+            //Build updated CatalogItem
+            var addCatalogItem = new CatalogItem();
+            addCatalogItem.Description = viewModel.Name;
+            addCatalogItem.Name = viewModel.Name;
+            addCatalogItem.PictureUri = viewModel.PictureUri;
+            addCatalogItem.Price = viewModel.Price;
+            addCatalogItem.ShowPrice = viewModel.ShowPrice;
+
+            await _catalogItemRepository.AddAsync(addCatalogItem);
+        }
     }
 }
