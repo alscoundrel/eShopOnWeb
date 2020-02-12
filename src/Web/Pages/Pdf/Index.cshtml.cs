@@ -36,7 +36,7 @@ namespace Microsoft.eShopWeb.Web.Pages.Pdf
                 catalogPageModel.Culture = culture;
             }
             
-            CatalogModel = await _catalogViewModelService.GetCatalogItems(catalogPageModel, true);
+            CatalogModel = await _catalogViewModelService.GetCatalogItems(catalogPageModel, false, true);
             CatalogPageModel = catalogPageModel;
         }
 

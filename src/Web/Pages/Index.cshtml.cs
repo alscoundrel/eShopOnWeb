@@ -43,7 +43,7 @@ namespace Microsoft.eShopWeb.Web.Pages
                 catalogPageModel.Culture = culture;
             }
             
-            CatalogModel = await _catalogViewModelService.GetCatalogItems(catalogPageModel, true);
+            CatalogModel = await _catalogViewModelService.GetCatalogItems(catalogPageModel, true, true);
             CatalogPageModel = catalogPageModel;
 
             CatalogModel.OrdersBy = Enum<NamesOrderBy>.GetAll().Select(orderBy => new SelectListItem { Value = orderBy.ToString(), Text = orderBy.ToString() });

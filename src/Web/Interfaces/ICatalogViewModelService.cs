@@ -8,7 +8,7 @@ namespace Microsoft.eShopWeb.Web.Services
 {
     public interface ICatalogViewModelService
     {
-        Task<CatalogIndexViewModel> GetCatalogItems(CatalogPageFiltersViewModel catalogPageFiltersViewModel, bool convertPrice = false, CancellationToken cancelationToken = default(CancellationToken));
+        Task<CatalogIndexViewModel> GetCatalogItems(CatalogPageFiltersViewModel catalogPageFiltersViewModel, bool useCache, bool convertPrice = false, CancellationToken cancelationToken = default(CancellationToken));
         Task<IEnumerable<SelectListItem>> GetBrands(CancellationToken cancelationToken = default(CancellationToken));
         Task<IEnumerable<SelectListItem>> GetTypes(CancellationToken cancelationToken = default(CancellationToken));
 

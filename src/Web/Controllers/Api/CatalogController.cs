@@ -21,7 +21,7 @@ namespace Microsoft.eShopWeb.Web.Controllers.Api
                 TypesFilter = typesFilterApplied,
                 SearchTextFilter = searchText
             };          
-            var catalogModel = await _catalogViewModelService.GetCatalogItems(catalogPageFiltersViewModel, true);
+            var catalogModel = await _catalogViewModelService.GetCatalogItems(catalogPageFiltersViewModel, false, true);
             return Ok(catalogModel);
         }
         

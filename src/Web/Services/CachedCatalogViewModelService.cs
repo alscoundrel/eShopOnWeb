@@ -35,15 +35,28 @@ namespace Microsoft.eShopWeb.Web.Services
             return await _catalogViewModelService.GetItemById(idItem, cancellationToken);
         }
 
-        public async Task<CatalogIndexViewModel> GetCatalogItems(CatalogPageFiltersViewModel catalogPageFiltersViewModel, bool convertPrice = false, CancellationToken cancelattionToken = default(CancellationToken))
+        /// <summary>
+        /// Get catalog items
+        /// </summary>
+        /// <param name="catalogPageFiltersViewModel"></param>
+        /// <param name="useCache"></param>
+        /// <param name="convertPrice"></param>
+        /// <param name="cancelattionToken"></param>
+        /// <returns></returns>
+        public async Task<CatalogIndexViewModel> GetCatalogItems(CatalogPageFiltersViewModel catalogPageFiltersViewModel, bool useCache, bool convertPrice = false, CancellationToken cancelattionToken = default(CancellationToken))
         {
-            var cacheKey = CacheHelpers.GenerateCatalogItemCacheKey(catalogPageFiltersViewModel);
+            if(useCache){
+                var cacheKey = CacheHelpers.GenerateCatalogItemCacheKey(catalogPageFiltersViewModel);
 
-            return await _cache.GetOrCreateAsync(cacheKey, async entry =>
-            {
-                entry.SlidingExpiration = CacheHelpers.DefaultCacheDuration;
-                return await _catalogViewModelService.GetCatalogItems(catalogPageFiltersViewModel, convertPrice, cancelattionToken);
-            });
+                return await _cache.GetOrCreateAsync(cacheKey, async entry =>
+                {
+                    entry.SlidingExpiration = CacheHelpers.DefaultCacheDuration;
+                    return await _catalogViewModelService.GetCatalogItems(catalogPageFiltersViewModel, useCache, convertPrice, cancelattionToken);
+                });
+            }
+            else{
+                return await _catalogViewModelService.GetCatalogItems(catalogPageFiltersViewModel, useCache, convertPrice, cancelattionToken);
+            }
         }
 
         public async Task<IEnumerable<SelectListItem>> GetTypes(CancellationToken cancelattionToken = default(CancellationToken))

@@ -70,7 +70,7 @@ namespace Microsoft.eShopWeb.Web.Services
                 };
         }
 
-        public async Task<CatalogIndexViewModel> GetCatalogItems(CatalogPageFiltersViewModel catalogPageFiltersViewModel, bool convertPrice = false, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<CatalogIndexViewModel> GetCatalogItems(CatalogPageFiltersViewModel catalogPageFiltersViewModel, bool useCache, bool convertPrice = false, CancellationToken cancellationToken = default(CancellationToken))
         {
             _logger.LogInformation("GetCatalogItems called.");
 

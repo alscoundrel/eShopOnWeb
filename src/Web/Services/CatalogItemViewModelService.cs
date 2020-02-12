@@ -33,11 +33,14 @@ namespace Microsoft.eShopWeb.Web.Services
         {
             //Build updated CatalogItem
             var addCatalogItem = new CatalogItem();
+            addCatalogItem.Id = viewModel.Id;
             addCatalogItem.Description = viewModel.Name;
             addCatalogItem.Name = viewModel.Name;
             addCatalogItem.PictureUri = viewModel.PictureUri;
             addCatalogItem.Price = viewModel.Price;
             addCatalogItem.ShowPrice = viewModel.ShowPrice;
+            addCatalogItem.CatalogBrandId = viewModel.CatalogBrandId;
+            addCatalogItem.CatalogTypeId = viewModel.CatalogTypeId;
 
             await _catalogItemRepository.AddAsync(addCatalogItem);
         }

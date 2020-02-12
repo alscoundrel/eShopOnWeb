@@ -27,11 +27,7 @@ namespace Microsoft.eShopWeb.Web.Pages.Admin
 
         public async Task OnGet(CatalogPageFiltersViewModel catalogPageModel, int? pageId)
         {
-            var cacheKey = CacheHelpers.GenerateCatalogItemCacheKey(catalogPageModel);
-
-            _cache.Remove(cacheKey);
-
-            CatalogModel = await _catalogViewModelService.GetCatalogItems(catalogPageModel, false);
+            CatalogModel = await _catalogViewModelService.GetCatalogItems(catalogPageModel, false, false);
             CatalogPageModel = catalogPageModel;
         }
     }
