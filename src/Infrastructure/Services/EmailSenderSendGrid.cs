@@ -13,24 +13,23 @@ namespace Microsoft.eShopWeb.Infrastructure.Services
     public class EmailSenderSendGrid : IEmailSender
     {
         private readonly ILogger<EmailSenderSendGrid> _logger;
-        private IServiceProvider _serviceProvider;
+        private readonly IConfiguration _configuration;
 
-        public EmailSenderSendGrid(ILoggerFactory loggerFactory, IServiceProvider serviceProvider){
+        public EmailSenderSendGrid(ILoggerFactory loggerFactory, IConfiguration configuration){
             _logger = loggerFactory.CreateLogger<EmailSenderSendGrid>();
-            _serviceProvider = serviceProvider;
+            _configuration = configuration;
         }
 
         public async Task SendEmailAsync(string email, string subject, string message)
-        {   
-            var configuration = _serviceProvider.GetRequiredService<IConfiguration>();
-            var apiKeyString = configuration.GetValue<string>("SendGrid:apiKey");
+        {
+            var apiKeyString = _configuration.GetValue<string>("SendGrid:apiKey");
             
             if(string.IsNullOrEmpty(apiKeyString)){
                 throw new Exception("SendGrid apiKey is null or empty");
             }
 
-            var from = configuration.GetValue<string>("SendGrid:from");
-            var fromName = configuration.GetValue<string>("SendGrid:fromName");
+            var from = _configuration.GetValue<string>("SendGrid:from");
+            var fromName = _configuration.GetValue<string>("SendGrid:fromName");
 
             if(string.IsNullOrEmpty(from)){
                 throw new Exception("Email From is null or empty");

@@ -25,15 +25,15 @@ namespace Microsoft.eShopWeb.Web.Services
         private readonly IAsyncRepository<CatalogItem> _itemRepository;
         private readonly IAsyncRepository<WishList> _wishListRepository;
         private readonly IEmailSender _emailSender;
-        private IServiceProvider _serviceProvider;
+        private readonly IConfiguration _configuration;
         private readonly ILogger<CatalogNotifications> _logger;
 
-        public CatalogNotifications(IAsyncRepository<CatalogItem> itemRepository, IAsyncRepository<WishList> wishListRepository, IEmailSender emailSender, SignInManager<ApplicationUser> signInManager, IServiceProvider serviceProvider, ILoggerFactory loggerFactory){
+        public CatalogNotifications(IAsyncRepository<CatalogItem> itemRepository, IAsyncRepository<WishList> wishListRepository, IEmailSender emailSender, SignInManager<ApplicationUser> signInManager, IConfiguration configuration, ILoggerFactory loggerFactory){
             _itemRepository = itemRepository;
             _wishListRepository = wishListRepository;
             _emailSender = emailSender;
             _signInManager = signInManager;
-            _serviceProvider = serviceProvider;
+            _configuration = configuration;
             _logger = loggerFactory.CreateLogger<CatalogNotifications>();
 
             // var configuration = _serviceProvider.GetRequiredService<IConfiguration>();
@@ -52,15 +52,14 @@ namespace Microsoft.eShopWeb.Web.Services
         /// </summary>
         /// <returns></returns>
         private async Task loadTemplatesDataAsync(){
-            var configuration = _serviceProvider.GetRequiredService<IConfiguration>();
             
             // for email subject
-            var pathTemplateSubject    = configuration.GetValue<string>("SendGrid:templateSubject");
+            var pathTemplateSubject    = _configuration.GetValue<string>("SendGrid:templateSubject");
             var templateContentSubject = await File.ReadAllTextAsync(pathTemplateSubject); 
             templateSubject            = Template.Parse(templateContentSubject);
 
             // for email message
-            var pathTemplateBody    = configuration.GetValue<string>("SendGrid:TemplateBody");
+            var pathTemplateBody    = _configuration.GetValue<string>("SendGrid:TemplateBody");
             var templateContentBody = await File.ReadAllTextAsync(pathTemplateBody); 
             templateBody            = Template.Parse(templateContentBody);
 

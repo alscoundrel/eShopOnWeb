@@ -21,7 +21,7 @@ namespace Web.Extensions.Middleware
                 new CultureInfo("pt-PT")
             };
             var configuration = app.ApplicationServices.GetService<IConfiguration>();
-            var defaulUserCulture = configuration.GetValue<string>("DefaultCulture") ?? "pt-PT";
+            var defaulUserCulture = configuration.GetValue<string>("Culture:DefaultCulture") ?? "pt-PT";
             var options = new RequestLocalizationOptions()
             {
                 DefaultRequestCulture = new RequestCulture(culture: defaulUserCulture, uiCulture: defaulUserCulture),

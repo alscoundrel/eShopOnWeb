@@ -23,15 +23,15 @@ namespace Microsoft.eShopWeb.Web.Pages.Admin
         private readonly ICatalogItemViewModelService _catalogItemViewModelService;
         private readonly CatalogNotifications _catalogNotifications;
         private readonly IAsyncRepository<CatalogItem> _catalogItemRepository;
-        private IServiceProvider _serviceProvider;
+        private readonly IConfiguration _configuration;
         private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public AddCatalogItemModel(ICatalogItemViewModelService catalogItemViewModelService, CatalogNotifications catalogNotifications, IAsyncRepository<CatalogItem> catalogItemRepository, IServiceProvider serviceProvider, IWebHostEnvironment webHostEnvironment)
+        public AddCatalogItemModel(ICatalogItemViewModelService catalogItemViewModelService, CatalogNotifications catalogNotifications, IAsyncRepository<CatalogItem> catalogItemRepository, IConfiguration configuration, IWebHostEnvironment webHostEnvironment)
         {
             _catalogItemViewModelService = catalogItemViewModelService;
             _catalogNotifications = catalogNotifications;
             _catalogItemRepository = catalogItemRepository;
-            _serviceProvider = serviceProvider;
+            _configuration = configuration;
             _webHostEnvironment = webHostEnvironment;
         }
 
@@ -47,8 +47,7 @@ namespace Microsoft.eShopWeb.Web.Pages.Admin
         {
             if (ModelState.IsValid)
             {
-                var configuration = _serviceProvider.GetRequiredService<IConfiguration>();
-                var pathImagesString = configuration.GetValue<string>("UploadPaths:Images");
+                var pathImagesString = _configuration.GetValue<string>("UploadPaths:Images");
 
                 // get last itemId
                 var catalogItems = await _catalogItemRepository.ListAllAsync();
@@ -60,7 +59,7 @@ namespace Microsoft.eShopWeb.Web.Pages.Admin
                 var nameImg = $"{nextId}.{extension}";
                 CatalogModel.PictureUri = $"{pathImagesString}/{nameImg}";
 
-                var path = Path.Combine(_webHostEnvironment.WebRootPath, CatalogModel.PictureUri);
+                var path = $"{_webHostEnvironment.WebRootPath}{pathImagesString}\\{nameImg}".Replace("/", "\\");
                 var stream = new FileStream(path, FileMode.Create);
 
                 await CatalogModel.FormImage.CopyToAsync(stream);

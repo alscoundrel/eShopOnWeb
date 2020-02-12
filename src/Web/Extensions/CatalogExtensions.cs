@@ -28,7 +28,7 @@ namespace Web.Extensions
             services.AddScoped<IWishListViewModelService, WishListViewModelService>();
             services.Configure<CatalogSettings>(configuration);
             services.AddSingleton<IUriComposer>(new UriComposer(configuration.Get<CatalogSettings>()));
-            services.AddSingleton<CatalogNotifications>();
+            services.AddScoped<CatalogNotifications>();
         }
 
     }

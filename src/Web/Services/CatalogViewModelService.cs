@@ -31,8 +31,8 @@ namespace Microsoft.eShopWeb.Web.Services
         private readonly ICurrencyService _currencyService;
         private readonly IConfiguration _configuration;
 
-        private Currency default_price_unit = Currency.USD; // TODO: Get from configuration
-        private Currency user_price_unit;// TODO: Get FROM user Culture
+        private Currency default_price_unit = Currency.GBP;
+        private Currency user_price_unit;
 
         public CatalogViewModelService(
             ILoggerFactory loggerFactory,
@@ -51,7 +51,9 @@ namespace Microsoft.eShopWeb.Web.Services
             _currencyService = currencyService;
             _configuration = configuration;
 
-            Enum.TryParse(_configuration["DefaultCulture"], true, out default_price_unit);
+            // get from configuration
+            Enum.TryParse(_configuration.GetValue<string>("Culture:DefaultISOCurrencySymbol"), true, out default_price_unit);
+            // get from user culture
             user_price_unit = CultureServiceUser.FindCurrency(default_price_unit);
         }
 
