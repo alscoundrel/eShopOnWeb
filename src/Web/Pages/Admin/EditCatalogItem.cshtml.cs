@@ -7,6 +7,7 @@ using Microsoft.eShopWeb.Web.Interfaces;
 using Microsoft.eShopWeb.Web.Services;
 using Microsoft.eShopWeb.Web.ViewModels;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 
 namespace Microsoft.eShopWeb.Web.Pages.Admin
 {
@@ -32,8 +33,9 @@ namespace Microsoft.eShopWeb.Web.Pages.Admin
 
         public async Task<IActionResult> OnPostAsync()
         {
+            ModelState.Remove("CatalogModel.FormImage");
             if (ModelState.IsValid)
-            {
+            { 
                 await _catalogItemViewModelService.UpdateCatalogItem(CatalogModel);
                 await _catalogNotifications.CatalogItemsNotifyAsync(CatalogModel.Id, CatalogModel.Price);
             }

@@ -94,12 +94,10 @@ namespace Microsoft.eShopWeb.Web.Pages.WishList
         /// </summary>
         /// <param name="checkDelete">authorizes to eliminate</param>
         /// <returns></returns>
-        public async Task<IActionResult> OnPostDelete(string checkDelete){
+        public async Task<IActionResult> OnPostDelete(){
             WishListModel = await _wishListViewModelService.GetOrCreateWishListForUser(User.Identity.Name);
-            if(checkDelete == "on"){
-                await _wishListService.DeleteWishListAsync(WishListModel.Id);
-                WishListModel = await _wishListViewModelService.GetOrCreateWishListForUser(User.Identity.Name);
-            }
+            await _wishListService.DeleteWishListAsync(WishListModel.Id);
+            WishListModel = await _wishListViewModelService.GetOrCreateWishListForUser(User.Identity.Name);
             return RedirectToPage();
         }
     }

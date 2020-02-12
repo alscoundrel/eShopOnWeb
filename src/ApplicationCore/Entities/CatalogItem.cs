@@ -10,7 +10,6 @@ namespace Microsoft.eShopWeb.ApplicationCore.Entities
         public string PictureUri { get; set; }
         public int CatalogTypeId { get; set; }
         public int CatalogBrandId { get; set; }
-
         public bool ShowPrice { get; set; } = true;
 
         #region "Navigation properties"

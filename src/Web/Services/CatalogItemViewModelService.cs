@@ -31,7 +31,7 @@ namespace Microsoft.eShopWeb.Web.Services
 
         public async Task AddCatalogItem(CatalogItemViewModel viewModel)
         {
-            //Build updated CatalogItem
+            //Build add CatalogItem
             var addCatalogItem = new CatalogItem();
             addCatalogItem.Id = viewModel.Id;
             addCatalogItem.Description = viewModel.Name;
@@ -43,6 +43,13 @@ namespace Microsoft.eShopWeb.Web.Services
             addCatalogItem.CatalogTypeId = viewModel.CatalogTypeId;
 
             await _catalogItemRepository.AddAsync(addCatalogItem);
+        }
+
+        public async Task DeleteCatalogItem(int itemId){
+            //Build delete CatalogItem
+            var deleteCatalogItem = new CatalogItem();
+            deleteCatalogItem.Id = itemId;
+            await _catalogItemRepository.DeleteAsync(deleteCatalogItem);
         }
     }
 }

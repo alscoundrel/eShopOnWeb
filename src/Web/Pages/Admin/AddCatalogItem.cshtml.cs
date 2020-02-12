@@ -25,22 +25,26 @@ namespace Microsoft.eShopWeb.Web.Pages.Admin
         private readonly IAsyncRepository<CatalogItem> _catalogItemRepository;
         private readonly IConfiguration _configuration;
         private readonly IWebHostEnvironment _webHostEnvironment;
+        private readonly ICatalogViewModelService _catalogViewModelService;
 
-        public AddCatalogItemModel(ICatalogItemViewModelService catalogItemViewModelService, CatalogNotifications catalogNotifications, IAsyncRepository<CatalogItem> catalogItemRepository, IConfiguration configuration, IWebHostEnvironment webHostEnvironment)
+        public AddCatalogItemModel(ICatalogItemViewModelService catalogItemViewModelService, CatalogNotifications catalogNotifications, IAsyncRepository<CatalogItem> catalogItemRepository, IConfiguration configuration, IWebHostEnvironment webHostEnvironment,
+        ICatalogViewModelService catalogViewModelService)
         {
             _catalogItemViewModelService = catalogItemViewModelService;
             _catalogNotifications = catalogNotifications;
             _catalogItemRepository = catalogItemRepository;
             _configuration = configuration;
             _webHostEnvironment = webHostEnvironment;
+            _catalogViewModelService = catalogViewModelService;
         }
 
         [BindProperty]
         public CatalogItemViewModel CatalogModel { get; set; } = new CatalogItemViewModel();
 
-        public void OnGet()
+        public async void OnGet()
         {
-
+            CatalogModel.Brands = await _catalogViewModelService.GetBrands();
+            CatalogModel.Types = await _catalogViewModelService.GetTypes();
         }
 
         public async Task<IActionResult> OnPostAsync()
@@ -57,12 +61,16 @@ namespace Microsoft.eShopWeb.Web.Pages.Admin
                 
                 var extension = CatalogModel.FormImage.FileName.Substring(CatalogModel.FormImage.FileName.LastIndexOf(".")+1);
                 var nameImg = $"{nextId}.{extension}";
-                CatalogModel.PictureUri = $"{pathImagesString}/{nameImg}";
+                
 
                 var path = $"{_webHostEnvironment.WebRootPath}{pathImagesString}\\{nameImg}".Replace("/", "\\");
-                var stream = new FileStream(path, FileMode.Create);
-
-                await CatalogModel.FormImage.CopyToAsync(stream);
+                using (var stream = new FileStream(path, FileMode.Create)){
+                    await CatalogModel.FormImage.CopyToAsync(stream);
+                    //stream.Close();
+                }
+                
+                CatalogModel.PictureUri = $"{pathImagesString}/{nameImg}";
+                CatalogModel.Id = nextId;
                 
                 await _catalogItemViewModelService.AddCatalogItem(CatalogModel);
             }

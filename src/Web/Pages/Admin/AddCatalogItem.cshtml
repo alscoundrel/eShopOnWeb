@@ -24,13 +24,22 @@
                 <div class="form-group">
                     <label asp-for="CatalogModel.ShowPrice"></label>
                     <input asp-for="CatalogModel.ShowPrice" class="form-control-checkbox" />
-                    <span asp-validation-for="CatalogModel.ShowPrice"></span>
                 </div>
                 <div class="form-group">
                     <label asp-for="CatalogModel.FormImage">File</label>
                     <input type="file" asp-for="CatalogModel.FormImage" class="form-control" accept="image/png, image/jpeg"/>
                     <span asp-validation-for="CatalogModel.FormImage"></span>
                 </div>
+                <div class="form-group">
+                    <label asp-for="CatalogModel.CatalogBrandId">Brand</label>
+                    <select asp-for="CatalogModel.CatalogBrandId" asp-items="@Model.CatalogModel.Brands" class="form-control"></select>
+                    
+                </div>
+                <div class="form-group">
+                    <label asp-for="CatalogModel.CatalogTypeId">Type</label>
+                    <select asp-for="CatalogModel.CatalogTypeId" asp-items="@Model.CatalogModel.Types" class="form-control"></select>
+                </div>
+
 
                 <div class="col-md-2">
                     <input type="submit" value="Save" class="esh-catalog-button" />
