@@ -2,6 +2,7 @@
 using Microsoft.eShopWeb.ApplicationCore.Entities;
 using Microsoft.eShopWeb.ApplicationCore.Entities.BasketAggregate;
 using Microsoft.eShopWeb.ApplicationCore.Entities.OrderAggregate;
+using Microsoft.eShopWeb.ApplicationCore.Entities.StoreAggregate;
 using Microsoft.eShopWeb.ApplicationCore.Entities.WishListAggregate;
 using System.Reflection;
 

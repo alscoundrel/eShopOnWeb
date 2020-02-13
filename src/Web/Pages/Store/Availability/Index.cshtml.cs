@@ -22,7 +22,8 @@ namespace Microsoft.eShopWeb.Web.Pages.Store.Availability
         public StoreItemsAvailabilityViewModel StoreItemsAvailabilityViewModel = new StoreItemsAvailabilityViewModel();
 
         public void OnGet(int catalogItemId){
-            StoreItemsAvailabilityViewModel.CatalogItemId = catalogItemId; 
+            StoreItemsAvailabilityViewModel.CatalogItemId = catalogItemId;
+            
         }
     }
 }

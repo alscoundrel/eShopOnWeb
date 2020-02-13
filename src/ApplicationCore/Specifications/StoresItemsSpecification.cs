@@ -1,5 +1,5 @@
 ﻿using Microsoft.eShopWeb.ApplicationCore.Entities;
-using Microsoft.eShopWeb.ApplicationCore.Entities.WishListAggregate;
+using Microsoft.eShopWeb.ApplicationCore.Entities.StoreAggregate;
 
 namespace Microsoft.eShopWeb.ApplicationCore.Specifications
 {

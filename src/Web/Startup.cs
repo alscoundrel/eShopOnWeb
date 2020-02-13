@@ -303,7 +303,7 @@ namespace Microsoft.eShopWeb.Web
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllerRoute("culture-root", "{culture:slugify=en-US}/{controller:slugify=Home}/{action:slugify=Index}/{id?}");
+                endpoints.MapControllerRoute("culture-root", "{culture}/{controller:slugify=Home}/{action:slugify=Index}/{id?}");
                 endpoints.MapControllerRoute("default", "{controller:slugify=Home}/{action:slugify=Index}/{id?}");
                 endpoints.MapRazorPages();
                 endpoints.MapHealthChecks("home_page_health_check");

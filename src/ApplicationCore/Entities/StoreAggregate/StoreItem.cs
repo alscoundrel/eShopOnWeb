@@ -1,6 +1,6 @@
 ﻿using Microsoft.eShopWeb.ApplicationCore.Interfaces;
 
-namespace Microsoft.eShopWeb.ApplicationCore.Entities.WishListAggregate
+namespace Microsoft.eShopWeb.ApplicationCore.Entities.StoreAggregate
 {
     public class StoreItem : IAggregateRoot
     {
