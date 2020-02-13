@@ -261,3 +261,5 @@ pub/
 
 # my ignores
 appsettings.Azure.json
+appsettings.Development.json
+appsettings.Casa.json
