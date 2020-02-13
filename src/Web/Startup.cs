@@ -16,6 +16,7 @@ using Microsoft.eShopWeb.Infrastructure.Data;
 using Microsoft.eShopWeb.Infrastructure.Identity;
 using Microsoft.eShopWeb.Infrastructure.Logging;
 using Microsoft.eShopWeb.Infrastructure.Services;
+using Microsoft.eShopWeb.Web.Middleware;
 using Microsoft.eShopWeb.Web.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -156,19 +157,16 @@ namespace Microsoft.eShopWeb.Web
             //services.AddApplicationInsightsTelemetry();
 
             
-            services.AddMvc(options =>
-            {
-                options.Conventions.Add(new RouteTokenTransformerConvention(
-                         new SlugifyParameterTransformer()));
-
-            })
+            services.AddMvc()
                 .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix, opts => { opts.ResourcesPath = "Resources";})
                 .AddDataAnnotationsLocalization();
 
-            services.AddRazorPages(options =>
-            {
-                options.Conventions.AuthorizePage("/Basket/Checkout");
-            });
+            services.AddRazorPages()
+                .AddRazorPagesOptions(options =>
+                {
+                    options.Conventions.Add(new BuildCultureRouteModelConvention());
+                    options.Conventions.AuthorizePage("/Basket/Checkout");
+                });
 
             services.AddAuthentication()
                 .AddGoogle(options =>{
@@ -281,13 +279,12 @@ namespace Microsoft.eShopWeb.Web
             }
 
             app.UseStaticFiles();
-            
-            // uso para apanhar informacao da cultura
-            app.UseRequestCulture();
 
             app.UseRouting();
             
             app.UseHttpsRedirection();
+            // uso para apanhar informacao da cultura
+            app.UseRequestCulture();
             app.UseCookiePolicy();
             app.UseAuthentication();
             app.UseAuthorization();
@@ -303,7 +300,7 @@ namespace Microsoft.eShopWeb.Web
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllerRoute("culture-root", "{culture}/{controller:slugify=Home}/{action:slugify=Index}/{id?}");
+                //endpoints.MapControllerRoute("culture-root", "{culture}/{controller:slugify=Home}/{action:slugify=Index}/{id?}");
                 endpoints.MapControllerRoute("default", "{controller:slugify=Home}/{action:slugify=Index}/{id?}");
                 endpoints.MapRazorPages();
                 endpoints.MapHealthChecks("home_page_health_check");

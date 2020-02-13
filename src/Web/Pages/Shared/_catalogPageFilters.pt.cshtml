@@ -35,7 +35,7 @@
             <input type="text" asp-for="@Model.CatalogPageModel.Order" onchange="@OnChanged"/> *@
 
             <input type="hidden" id="iptChangedFilters" name="icf" value="false">
-            <input class="esh-catalog-send" type="image" src="images/arrow-right.svg" />
+            <input class="esh-catalog-send" type="image" src="~/images/arrow-right.svg" />
 
             <div style="position:absolute;right: 0;top: 36px;">
                 <span>Visualização:</span>
@@ -45,9 +45,9 @@
                     var ListClick    = Model.CatalogPageModel.ViewMode == ViewsModes.List?"return false;":"document.getElementById('iptViewModel').value = 'List'";
                     var TableClick   = Model.CatalogPageModel.ViewMode == ViewsModes.Table?"return false;":"document.getElementById('iptViewModel').value = 'Table'";
                 }
-                <input class="esh-catalog-mode" type="image" src="images/gallery_items.png" onclick="@GalleryClick"/>
-                <input class="esh-catalog-mode" type="image" src="images/list_items.png" onclick="@ListClick"/>
-                <input class="esh-catalog-mode" type="image" src="images/table_items.png" onclick="@TableClick"/>
+                <input class="esh-catalog-mode" type="image" src="~/images/gallery_items.png" onclick="@GalleryClick"/>
+                <input class="esh-catalog-mode" type="image" src="~/images/list_items.png" onclick="@ListClick"/>
+                <input class="esh-catalog-mode" type="image" src="~/images/table_items.png" onclick="@TableClick"/>
             </div>
             @{
                 @* set pageid (page number - 1) *@
@@ -70,13 +70,13 @@
 
             <div style="position:absolute;right:0;top: 5px;">
                 	<a class="" id="PT" asp-all-route-data="@buildQueryStringDict(reference, pt)" aria-label="PT">
-                        <img src="images/flags/icon_PT.png">
+                        <img src="~/images/flags/icon_PT.png">
                     </a>
                     <a class="" id="US" asp-all-route-data="@buildQueryStringDict(reference, us)" aria-label="US">
-                        <img src="images/flags/icon_US.png">
+                        <img src="~/images/flags/icon_US.png">
                     </a>
                     <a class="" id="GB" asp-all-route-data="@buildQueryStringDict(reference, gb)" aria-label="GB">
-                        <img src="images/flags/icon_GB.png">
+                        <img src="~/images/flags/icon_GB.png">
                     </a>
             </div>
         </form>

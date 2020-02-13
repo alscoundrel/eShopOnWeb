@@ -26,7 +26,7 @@
 <body>
     <div class="esh-app-wrapper">
         <header class="esh-app-header">
-            <div class="container">
+            <div class="container-fluid">
                 <article class="row">
                     <section class="col-lg-6 col-md-5 col-xs-12">
                         <a asp-area="" asp-page="/Index">
@@ -36,8 +36,11 @@
                     <partial name="_LoginPartial" />
                 </article>
             </div>
+            <partial name="_SelectLanguage" />
         </header>
+        
         @RenderBody()
+
         <footer class="esh-app-footer footer">
             <div class="container">
                 <article class="row">
