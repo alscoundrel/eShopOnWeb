@@ -1,8 +1,8 @@
 ﻿@model CatalogItemViewModel
 
 @{
-    var tm = "#delModal" + Model.Id;
-    var mid = "delModal" + Model.Id;
+    var mid = $"delModal{Model.Id}";
+    var tm = $"#{mid}";
 }
 <form asp-page="/Admin" method="post">
     <div>

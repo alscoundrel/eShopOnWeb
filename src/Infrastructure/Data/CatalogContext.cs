@@ -24,6 +24,8 @@ namespace Microsoft.eShopWeb.Infrastructure.Data
         public DbSet<BasketItem> BasketItems { get; set; }
         public DbSet<WishList> Wishers { get; set; }
         public DbSet<WishItem> WishItems { get; set; }
+        public DbSet<Store> Stores { get; set;}
+        public DbSet<StoreItem> StoresItems { get; set;}
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -31,6 +33,9 @@ namespace Microsoft.eShopWeb.Infrastructure.Data
             builder.Entity<CatalogItem>()
             .Property(x=>x.ShowPrice)
             .HasDefaultValue(true);
+
+            builder.Entity<StoreItem>()
+            .HasKey(c => new { c.StoreId, c.CatalogItemId });
 
             builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         }

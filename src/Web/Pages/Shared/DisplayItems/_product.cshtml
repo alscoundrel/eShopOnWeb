@@ -1,7 +1,17 @@
 ﻿@model CatalogItemViewModel
 
+@{
+    var mid = $"storeAvailabilityModal{Model.Id}";
+    var tm = $"#{mid}";
+    var contentAvailability = $"StoreAvailabilityBody_{Model.Id}";
+    var url = $"/Store/Availability?CatalogItemId={Model.Id}";
+}
+
 <form asp-page="/Basket/Index" method="post">
-    <img class="esh-catalog-thumbnail" src="@Model.PictureUri" />
+    <a class="btn" data-toggle="modal" data-target="@tm" onclick="showStoreItemAvailability('@url', '@contentAvailability')">
+        <img class="esh-catalog-thumbnail" src="@Model.PictureUri" />
+    </a>
+
     @if(Model.ShowPrice){
         <input class="esh-catalog-button" type="submit" value="[ ADD TO BASKET ]" />
     }
@@ -34,3 +44,21 @@
         <input type="hidden" asp-for="@Model.PriceSymbol" name="priceSymbol" />
     </form>
 }
+
+<div class="modal fade" id="@mid" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">Item Information</h4>
+            </div>
+            <div class="modal-body">
+                <h3>Store Availability</h3>
+                <div id="@contentAvailability"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

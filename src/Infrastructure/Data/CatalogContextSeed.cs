@@ -1,4 +1,5 @@
 ﻿using Microsoft.eShopWeb.ApplicationCore.Entities;
+using Microsoft.eShopWeb.ApplicationCore.Entities.WishListAggregate;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -41,6 +42,23 @@ namespace Microsoft.eShopWeb.Infrastructure.Data
 
                     await catalogContext.SaveChangesAsync();
                 }
+
+                if (!catalogContext.Stores.Any())
+                {
+                    catalogContext.Stores.AddRange(
+                        GetPreconfiguredStores());
+
+                    await catalogContext.SaveChangesAsync();
+                }
+
+                if (!catalogContext.StoresItems.Any())
+                {
+                    catalogContext.StoresItems.AddRange(
+                        GetPreconfiguredStoresItems());
+
+                    await catalogContext.SaveChangesAsync();
+                }
+
             }
             catch (Exception ex)
             {
@@ -96,5 +114,30 @@ namespace Microsoft.eShopWeb.Infrastructure.Data
                 new CatalogItem() { CatalogTypeId=2,CatalogBrandId=5, Description = "Prism White TShirt", Name = "Prism White TShirt", Price = 12, PictureUri = "http://catalogbaseurltobereplaced/images/products/12.png" }
             };
         }
+
+        static IEnumerable<Store> GetPreconfiguredStores()
+        {
+            return new List<Store>()
+            {
+                new Store() { Name = "Online"},
+                new Store() { Name = "Viseu" },
+                new Store() { Name = "Aveiro" }
+            };
+        }
+
+        static IEnumerable<StoreItem> GetPreconfiguredStoresItems()
+        {
+            return new List<StoreItem>()
+            {
+                new StoreItem() { StoreId = 1, CatalogItemId = 1, Amount = 1, Unit = "un"},
+                new StoreItem() { StoreId = 2, CatalogItemId = 1, Amount = 2, Unit = "un"},
+                new StoreItem() { StoreId = 3, CatalogItemId = 1, Amount = 3, Unit = "un"},
+                new StoreItem() { StoreId = 1, CatalogItemId = 2, Amount = 4, Unit = "un"},
+                new StoreItem() { StoreId = 2, CatalogItemId = 2, Amount = 5, Unit = "un"},
+                new StoreItem() { StoreId = 3, CatalogItemId = 2, Amount = 6, Unit = "un"},
+                new StoreItem() { StoreId = 1, CatalogItemId = 3, Amount = 7, Unit = "un"}
+            };
+        }
+
     }
 }
