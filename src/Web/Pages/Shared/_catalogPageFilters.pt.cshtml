@@ -1,17 +1,5 @@
 ﻿@model IndexModel
 
-@{
-    IDictionary<string, string> buildQueryStringDict(string key, string value) {
-		var queryStringDict = Context.Request.Query
-                                        .Where(x => x.Key.ToString()!="icf")
-                                        .Where(x => x.Key.ToString()!="Culture")
-                                        .Where(x => x.Key.ToString()!="culture")
-                                        .ToDictionary(x => x.Key, x => x.Value.ToString());
-		queryStringDict[key] = value;
-		return queryStringDict;
-	}
-}
-
     <div class="container" style="position:relative;">
         <form method="get">
             @{
@@ -62,22 +50,6 @@
                     <input type="hidden" name="culture" value="@culture"/>
                 }
 
-                var reference = "Culture";
-                var pt = "pt-PT";
-                var us = "en-US";
-                var gb = "en-GB";
             }
-
-            <div style="position:absolute;right:0;top: 5px;">
-                	<a class="" id="PT" asp-all-route-data="@buildQueryStringDict(reference, pt)" aria-label="PT">
-                        <img src="~/images/flags/icon_PT.png">
-                    </a>
-                    <a class="" id="US" asp-all-route-data="@buildQueryStringDict(reference, us)" aria-label="US">
-                        <img src="~/images/flags/icon_US.png">
-                    </a>
-                    <a class="" id="GB" asp-all-route-data="@buildQueryStringDict(reference, gb)" aria-label="GB">
-                        <img src="~/images/flags/icon_GB.png">
-                    </a>
-            </div>
         </form>
     </div>

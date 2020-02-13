@@ -1,12 +1,7 @@
-﻿using ApplicationCore.UseTypes;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.eShopWeb.Web.Extensions;
-using Microsoft.eShopWeb.Web.Services;
+﻿using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.eShopWeb.Web.Interfaces;
 using Microsoft.eShopWeb.Web.ViewModels;
 using Microsoft.Extensions.Caching.Memory;
-using System.Globalization;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Microsoft.eShopWeb.Web.Pages.Pdf

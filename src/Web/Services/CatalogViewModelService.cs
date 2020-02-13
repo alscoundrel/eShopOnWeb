@@ -14,6 +14,7 @@ using System.Threading;
 using Infrastructure.Services;
 using System.Globalization;
 using Microsoft.Extensions.Configuration;
+using Microsoft.eShopWeb.Web.Interfaces;
 
 namespace Microsoft.eShopWeb.Web.Services
 {

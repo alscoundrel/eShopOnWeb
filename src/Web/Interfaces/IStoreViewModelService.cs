@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using System.Threading;
 using Microsoft.eShopWeb.Web.Pages.Store.Availability;
 
-namespace Microsoft.eShopWeb.Web.Services
+namespace Microsoft.eShopWeb.Web.Interfaces
 {
     public interface IStoreViewModelService
     {
