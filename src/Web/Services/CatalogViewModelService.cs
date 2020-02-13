@@ -59,12 +59,14 @@ namespace Microsoft.eShopWeb.Web.Services
         }
 
         private async Task<CatalogItemViewModel> CreateCatalogItemViewModel(CatalogItem catalogItem, bool convertPrice, CancellationToken cancellationToken = default(CancellationToken)){
+            var price = await (convertPrice?_currencyService.Convert(catalogItem.Price, default_price_unit, user_price_unit, cancellationToken):Task.FromResult(catalogItem.Price));
+            
             return new CatalogItemViewModel()
                 {
                     Id = catalogItem.Id,
                     Name = catalogItem.Name,
                     PictureUri = catalogItem.PictureUri,
-                    Price = await (convertPrice?_currencyService.Convert(catalogItem.Price, default_price_unit, user_price_unit, cancellationToken):Task.FromResult(catalogItem.Price)),
+                    Price = Math.Round(price, 2),
                     ShowPrice = catalogItem.ShowPrice,
                     PriceUnit = user_price_unit,
                     PriceSymbol = CultureInfo.CurrentCulture.NumberFormat.CurrencySymbol

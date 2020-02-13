@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Catalogo - Microsoft.eShopOnWeb</title>
+    <style>
+        html, body {
+            font-family: Montserrat, sans-serif;
+            font-size: 16px;
+            font-weight: 400;
+            z-index: 10;
+        }
+        .container-fluid {
+            padding-right: 15px;
+            padding-left: 15px;
+            margin-right: auto;
+            margin-left: auto;
+        }
+        .row {
+            margin-right: -15px;
+            margin-left: -15px;
+        }
+        .col-md-2, .col-md-3, .col-md-4, .col-md-7 {
+            float: left;
+            position: relative;
+            min-height: 1px;
+            padding-right: 15px;
+            padding-left: 15px;
+            line-height: 1.42857143;
+            color: #333;
+            box-sizing: border-box;
+        }
+        .col-md-1 { width: 8.333333333%;}
+        .col-md-2 { width: 16.66666667%;}
+        .col-md-3 { width: 25%;}
+        .col-md-4 { width: 33.33333333%}
+        .col-md-5 { width: 41.66666667%;}
+        .col-md-6 { width: 50%;}
+        .col-md-7 { width: 58.33333333%;}
+        .col-md-8 { width: 66.66666667%;}
+        .col-md-9 { width: 75%;}
+        .col-md-10 { width: 83.33333333%;}
+        .col-md-11 { width: 91.66666667%;}
+        .col-md-12 { width: 100%;}
+        .esh-catalog-items {
+            margin-top: 1rem;
+        }
+        .esh-catalog-item {
+            margin-bottom: 1.5rem;
+            text-align: center;
+            width: 33%;
+            display: inline-block;
+            float: none !important;
+            vertical-align: top;
+        }
+        .esh-catalog-thumbnail {
+            max-width: 370px;
+            width: 100%;
+        }
+        .esh-catalog-name {
+            font-size: 1rem;
+            font-weight: 300;
+            margin-top: .5rem;
+            text-align: center;
+            text-transform: uppercase;
+        }
+        .esh-catalog-price {
+            font-size: 24px;
+            font-weight: 900;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+        <div class="container-fluid">
+            <div style="text-align:center;"><h2>Catalog Online</h2></div>
+            {{ PP }}
+            <div class="esh-catalog-items row">
+                {{- for CatalogItem in Data }} 
+                    <div class="esh-catalog-item col-md-4">
+                        <div class="row">
+                            <div>
+                               <img class="esh-catalog-thumbnail" src="{{ CatalogItem.PictureUri }}" style="width: 220px;">
+                            </div>
+                            <div>
+                                <div class="esh-catalog-name">
+                                    <span>{{ CatalogItem.Name }}</span>
+                                </div>
+                                <div class="esh-catalog-price">
+                                    {{ if CatalogItem.ShowPrice }}
+                                    
+                                        <span class="product-price">{{ CatalogItem.Price }}</span>
+                                        <span class="product-price-unit">{{ CatalogItem.PriceSymbol }}</span>
+                                    
+                                    {{ else }}
+                                        <span>"Sob-Consulta"</span>
+                                    {{ end }}
+                                </div>        
+                            </div>
+                        </div>
+                    </div>
+                {{ end -}}
+            </div>
+ 
+        </div>
+        <footer class="container-fluid">
+            <div class="row">
+                <div class="col-md-3"><h5>{{Date}}</h5></div>
+                <div class="col-md-4">&nbsp;</div>
+                <div class="col-md-4">&copy; {{Year}} eShopOnWeb.com</div>
+            </div>
+        </footer>
+</body>
+</html>

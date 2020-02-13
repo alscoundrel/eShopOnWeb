@@ -6,7 +6,9 @@
     @model IndexModel
 }
 @{
-    var href = $"/reports/pdf/catalog{HttpContext.Request.QueryString.ToString()}";
+    var hrefUrl = $"/reports/pdf/catalog{HttpContext.Request.QueryString.ToString()}";
+    var hrefRender = $"/reports/pdf/render{HttpContext.Request.QueryString.ToString()}";
+    var hrefScriban = $"/reports/pdf/scriban{HttpContext.Request.QueryString.ToString()}";
 }
 
 <P>@Localizer["Hello"]</P>
@@ -26,7 +28,9 @@
         @* <partial name="_pagination" for="CatalogModel.PaginationInfo" /> *@
         @await Html.PartialAsync("_pagination", Model.CatalogModel.PaginationInfo);
         @if(Model.CatalogModel.PaginationInfo.ActualPage == 0){
-            <a href="@href" target="_blank"><img src="~/images/document/icon_pdf_64.png"></a>
+            <span>By url</span><a href="@hrefUrl" target="_blank"><img src="~/images/document/icon_pdf_64.png"></a>
+            <span>&nbsp;&nbsp;&nbsp;By render</Span><a href="@hrefRender" target="_blank"><img src="~/images/document/icon_pdf_64.png"></a>
+            <span>&nbsp;&nbsp;&nbsp;By Scriban</Span><a href="@hrefScriban" target="_blank"><img src="~/images/document/icon_pdf_64.png"></a>
         }
 
         if(Model.CatalogPageModel.ViewMode == ViewsModes.Table){

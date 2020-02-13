@@ -22,7 +22,7 @@ namespace Microsoft.eShopWeb.Web.Pages.Pdf
         public CatalogIndexViewModel CatalogModel { get; set; } = new CatalogIndexViewModel();
         public CatalogPageFiltersViewModel CatalogPageModel {get; set;} = new CatalogPageFiltersViewModel();
 
-        public async Task OnGet(CatalogPageFiltersViewModel catalogPageModel, bool icf, string culture)//CatalogIndexViewModel catalogModel
+        public async Task OnGet(CatalogPageFiltersViewModel catalogPageModel, string culture)//CatalogIndexViewModel catalogModel
         {   
             catalogPageModel.ItemsPerPage = 0;
             catalogPageModel.PageId = 0;
