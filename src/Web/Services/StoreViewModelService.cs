@@ -11,7 +11,7 @@ using Microsoft.eShopWeb.Web.Pages.Store.Availability;
 using Microsoft.eShopWeb.Web.Services;
 using Microsoft.Extensions.Logging;
 
-namespace Web.Services
+namespace Microsoft.eShopWeb.Web.Services
 {
     public class StoreViewModelService : IStoreViewModelService
     {
@@ -26,34 +26,38 @@ namespace Web.Services
             _catalogItemRepository = catalogItemRepository;
             _logger = loggerFactory.CreateLogger<StoreViewModelService>();
         }
-        public async Task<StoreItemsAvailabilityViewModel> GetItemAvailabilityPerStore(int catalogItemId, CancellationToken cancelationToken = default)
-        {   var catalogItem = await _catalogItemRepository.GetByIdAsync(catalogItemId);
+        public async Task<StoreItemsAvailabilityViewModel> GetItemAvailabilityByStore(int catalogItemId, CancellationToken cancelationToken = default)
+        {
+            var catalogItem = await _catalogItemRepository.GetByIdAsync(catalogItemId);
             cancelationToken.ThrowIfCancellationRequested();
             if(catalogItem == null){
                 _logger.LogError("Catalog Item not finded id {catalogItemId}", catalogItemId);
                 throw new System.Exception($"Catalog Item not finded id {catalogItemId}");
             }
 
-            var itemsPerStore = _repository.StoresItems.Where(x => x.CatalogItemId == catalogItemId).ToList();
+            var itemsAvailabulityByStore = _repository.StoresItems.Where(x => x.CatalogItemId == catalogItemId).ToList();
             cancelationToken.ThrowIfCancellationRequested();
+            var stores = await this.GetStores(cancelationToken);
             
-            var stokeItemsAvailabilityViewModel = new List<ItemsAvailabilityViewModel>();
-            foreach (var stokes in itemsPerStore)
+            var stokeItemsAvailabilityViewModel = new List<ItemsAvailabilityByStoreViewModel>();
+            foreach (var stokes in itemsAvailabulityByStore)
             {
-                stokeItemsAvailabilityViewModel.Add( new ItemsAvailabilityViewModel(){
+                stokeItemsAvailabilityViewModel.Add( new ItemsAvailabilityByStoreViewModel(){
                     Amount = stokes.Amount,
                     Unit = stokes.Unit,
-                    StoreId = stokes.StoreId
+                    StoreId = stokes.StoreId,
+                    StoreName =  stores.Where(x => x.Value == stokes.StoreId.ToString()).FirstOrDefault().Text         
                 });
             }
 
             var storeItemsAvailabilityViewModel = new StoreItemsAvailabilityViewModel(){
                 Name = catalogItem.Name,
+                CatalogItemId = catalogItemId,
                 ItemsAvailabilityViewModels = stokeItemsAvailabilityViewModel
             };
 
 
-            throw new System.NotImplementedException();
+            return storeItemsAvailabilityViewModel;
         }
 
         public async Task<IEnumerable<SelectListItem>> GetStores(CancellationToken cancelationToken = default)

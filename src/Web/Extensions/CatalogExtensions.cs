@@ -26,6 +26,7 @@ namespace Web.Extensions
             services.AddScoped<ICatalogItemViewModelService, CatalogItemViewModelService>();
             services.AddScoped<IWishListService, WishListService>();
             services.AddScoped<IWishListViewModelService, WishListViewModelService>();
+            services.AddScoped<IStoreViewModelService, StoreViewModelService>();
             services.Configure<CatalogSettings>(configuration);
             services.AddSingleton<IUriComposer>(new UriComposer(configuration.Get<CatalogSettings>()));
             services.AddScoped<CatalogNotifications>();

@@ -5,6 +5,32 @@
     Layout = null;
 }
 
-<div class="row">
-    <h2>Teste Store @Model.StoreItemsAvailabilityViewModel.CatalogItemId</h2>
+<div class="container-fuild">
+    <div class="row">
+        <div class="col-md-12"><h5><b>For: </b>Teste Store @Model.StoreItemsAvailabilityViewModel.Name</h5></div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            @if(Model.StoreItemsAvailabilityViewModel.ItemsAvailabilityViewModels.Any()){
+                <table>
+                    <thead>
+                        <th>Store</th>
+                        <th>Stock</th>
+                        <th>Unit</th>
+                    </thead>
+                    @foreach (var itemsAvailability in Model.StoreItemsAvailabilityViewModel.ItemsAvailabilityViewModels)
+                    {
+                        <tr>
+                            <td>@itemsAvailability.StoreName</td>
+                            <td>@itemsAvailability.Amount</td>
+                            <td>@itemsAvailability.Unit</td>
+                        </tr>
+                    }
+                </table>
+            }
+            else{
+                <div>No quantity records per store</div>
+            }
+        </div>
+    </div>
 </div>

@@ -8,7 +8,7 @@ namespace Microsoft.eShopWeb.Web.Services
 {
     public interface IStoreViewModelService
     {
-        Task<StoreItemsAvailabilityViewModel> GetItemAvailabilityPerStore(int CatalogItemId, CancellationToken cancelationToken = default(CancellationToken));
+        Task<StoreItemsAvailabilityViewModel> GetItemAvailabilityByStore(int CatalogItemId, CancellationToken cancelationToken = default(CancellationToken));
         Task<IEnumerable<SelectListItem>> GetStores(CancellationToken cancelationToken = default(CancellationToken));
     }
 }
