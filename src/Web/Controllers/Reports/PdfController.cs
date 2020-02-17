@@ -14,6 +14,7 @@ using Microsoft.eShopWeb.ApplicationCore.Entities;
 
 namespace Microsoft.eShopWeb.Web.Controllers.Pdf
 {
+    [ApiExplorerSettings(IgnoreApi = true)]
     [Route("reports/[controller]/[action]")]
     public class PdfController : Controller
     {
