@@ -1,16 +1,18 @@
 ﻿@page
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Microsoft.Extensions.Localization;
 @inject IViewLocalizer Localizer
+@inject IStringLocalizer<Index> TextLocalizer
 
 @{
     ViewData["Title"] = "Catalog";
     @model IndexModel
-}
-@{
     var hrefUrl = $"/reports/pdf/catalog{HttpContext.Request.QueryString.ToString()}";
     var hrefRender = $"/reports/pdf/render{HttpContext.Request.QueryString.ToString()}";
     var hrefScriban = $"/reports/pdf/scriban{HttpContext.Request.QueryString.ToString()}";
 }
 
+<P>@TextLocalizer["Hello"]</P>
 <P>@Localizer["Hello"]</P>
 <section class="esh-catalog-hero">
     <div class="container">

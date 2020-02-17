@@ -116,12 +116,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="About" xml:space="preserve">
-    <value>Sur</value>
-  </data>
-  <data name="Use this area to provide additional information." xml:space="preserve">
-    <value>Utilisez cette zone pour fournir des informations supplémentaires .</value>
-  </data>
   <data name="Hello" xml:space="preserve">
     <value>Olá</value>
   </data>
