@@ -14,7 +14,7 @@ namespace Microsoft.eShopWeb.Infrastructure.Identity
             await userManager.CreateAsync(defaultUser, AuthorizationConstants.DEFAULT_PASSWORD);
 
             string adminUserName = "admin@microsoft.com";
-            var adminUser = new ApplicationUser { UserName = adminUserName, Email = adminUserName };
+            var adminUser = new ApplicationUser { UserName = adminUserName, Email = adminUserName};
             await userManager.CreateAsync(adminUser, AuthorizationConstants.DEFAULT_PASSWORD);
             adminUser = await userManager.FindByNameAsync(adminUserName);
             await userManager.AddToRoleAsync(adminUser, AuthorizationConstants.Roles.ADMINISTRATORS);
