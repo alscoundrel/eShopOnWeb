@@ -2,13 +2,13 @@
 using Ardalis.ListStartupServices;
 using Infrastructure.Services;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.eShopWeb.ApplicationCore.Interfaces;
@@ -16,8 +16,10 @@ using Microsoft.eShopWeb.Infrastructure.Data;
 using Microsoft.eShopWeb.Infrastructure.Identity;
 using Microsoft.eShopWeb.Infrastructure.Logging;
 using Microsoft.eShopWeb.Infrastructure.Services;
+using Microsoft.eShopWeb.Web.Authorization;
 using Microsoft.eShopWeb.Web.Middleware;
 using Microsoft.eShopWeb.Web.Services;
+using Microsoft.eShopWeb.Web.Swagger;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
@@ -182,13 +184,26 @@ namespace Microsoft.eShopWeb.Web
                     facebookOptions.AppId = facebookAuthNSection["AppId"];
                     facebookOptions.AppSecret = facebookAuthNSection["AppSecret"];
                 })
+                .AddJwtBearer(options =>
+                {
+                    options.Authority = "http://localhost:7000";
+                    options.RequireHttpsMetadata = !_webHostEnvironment.IsDevelopment();
+
+                    options.Audience = "eshoponweb";
+                })
             ;
 
             services.AddControllersWithViews();
 
             services.AddHttpContextAccessor();
             
-            services.AddSwaggerGen(c => c.SwaggerDoc("v1", new OpenApi.Models.OpenApiInfo { Title = "My API", Version = "v1"}));
+            services.AddSwaggerGen(c => {
+                c.SwaggerDoc("v1", new OpenApi.Models.OpenApiInfo { Title = "My API", Version = "v1" });
+                // Define the OAuth2.0 scheme that's in use (i.e. Implicit Flow)
+                c.AddSecurityDefinition(SwaggerConstants.IDENTITY_SERVER_SECURITY_SCHEME.Name, SwaggerConstants.IDENTITY_SERVER_SECURITY_SCHEME);
+
+                c.OperationFilter<AssignOAuth2SecurityRequirements>();
+            });
 
             services.AddHealthChecks();
 
@@ -199,6 +214,9 @@ namespace Microsoft.eShopWeb.Web
                 config.Path = "/allservices";
             });
 
+            services.AddSingleton<IAuthorizationPolicyProvider, AuthorizationPolicyProvider>();
+            services.AddSingleton<IAuthorizationHandler, HasScopeAuthorizationHandler>();
+            
             _services = services; // used to debug registered services
         }
 

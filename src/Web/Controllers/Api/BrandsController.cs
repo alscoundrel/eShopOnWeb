@@ -7,9 +7,13 @@ using Microsoft.eShopWeb.ApplicationCore.Interfaces;
 using Microsoft.eShopWeb.ApplicationCore.Entities;
 using System.Linq;
 using System;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.eShopWeb.Web.Authorization;
+using Microsoft.eShopWeb.ApplicationCore.Constants;
 
 namespace Microsoft.eShopWeb.Web.Controllers.Api
 {
+    [Authorize]
     public class BrandsController : BaseApiController
     {
         private readonly IAsyncRepository<CatalogBrand> _brandRepository;
@@ -21,6 +25,7 @@ namespace Microsoft.eShopWeb.Web.Controllers.Api
         /// </summary>
         /// <returns></returns>
         [HttpGet]
+        [Authorize(ApiAuthorizationConstants.CATALOG_BRAND_READ_SCOPE)]
         public async Task<ActionResult<IReadOnlyList<CatalogBrand>>> List()
         {
             var brands = await _brandRepository.ListAllAsync();
@@ -33,7 +38,7 @@ namespace Microsoft.eShopWeb.Web.Controllers.Api
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet("{id}")]
-        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
+        [Authorize(ApiAuthorizationConstants.CATALOG_BRAND_READ_SCOPE)]
         public async Task<ActionResult<CatalogBrand>> GetById(int id) {
             try  {
                 var brand = await _brandRepository.GetByIdAsync(id);
@@ -49,7 +54,7 @@ namespace Microsoft.eShopWeb.Web.Controllers.Api
         /// <param name="name"></param>
         /// <returns></returns>
         [HttpGet("{name}")]
-        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
+        [Authorize(ApiAuthorizationConstants.CATALOG_BRAND_READ_SCOPE)]
         public async Task<ActionResult<CatalogBrand>> GetByBrand(string name) {
             try  {
                 var brands = await _brandRepository.ListAllAsync();
@@ -67,6 +72,8 @@ namespace Microsoft.eShopWeb.Web.Controllers.Api
         /// <param name="catalogBrand"></param>
         /// <returns></returns>
         [HttpPost]
+        [Authorize(ApiAuthorizationConstants.CATALOG_BRAND_WRITE_SCOPE)]
+        [Authorize(Roles=AuthorizationConstants.Roles.ADMINISTRATORS)]
         public async Task<ActionResult<IReadOnlyList<CatalogBrand>>> Post(CatalogBrand catalogBrand)
         {
 
@@ -90,6 +97,8 @@ namespace Microsoft.eShopWeb.Web.Controllers.Api
         /// <param name="catalogBrand"></param>
         /// <returns></returns>
         [HttpPut]
+        [Authorize(ApiAuthorizationConstants.CATALOG_BRAND_WRITE_SCOPE)]
+        [Authorize(Roles=AuthorizationConstants.Roles.ADMINISTRATORS)]
         public async Task<ActionResult<IReadOnlyList<CatalogBrand>>> Put(CatalogBrand catalogBrand)
         {
             try  {
@@ -114,6 +123,8 @@ namespace Microsoft.eShopWeb.Web.Controllers.Api
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpDelete("{id}")]
+        [Authorize(ApiAuthorizationConstants.CATALOG_BRAND_WRITE_SCOPE)]
+        [Authorize(Roles=AuthorizationConstants.Roles.ADMINISTRATORS)]
         public async Task<ActionResult<IReadOnlyList<CatalogBrand>>> Delete(int id)
         {
             try  {

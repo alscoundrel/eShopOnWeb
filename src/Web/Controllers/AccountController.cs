@@ -15,7 +15,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace Microsoft.eShopWeb.Web.Controllers
 {
-    //[ApiExplorerSettings(IgnoreApi = true)]
+    [ApiExplorerSettings(IgnoreApi = true)]
     [Route("[controller]/[action]")]
     public class AccountController : Controller
     {

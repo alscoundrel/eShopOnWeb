@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using Microsoft.eShopWeb.Web.ViewModels;
 using Microsoft.eShopWeb.Web.Interfaces;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.eShopWeb.Web.Authorization;
 
 namespace Microsoft.eShopWeb.Web.Controllers.Api
 {
@@ -13,6 +15,7 @@ namespace Microsoft.eShopWeb.Web.Controllers.Api
         public CatalogController(ICatalogViewModelService catalogViewModelService) => _catalogViewModelService = catalogViewModelService;
 
         [HttpGet]
+        [Authorize(ApiAuthorizationConstants.CATALOG_ITEM_READ_SCOPE)]
         public async Task<ActionResult<CatalogViewModelService>> List(int? brandFilterApplied, int? typesFilterApplied, int? page, string searchText = null)
         {   
             var catalogPageFiltersViewModel = new CatalogPageFiltersViewModel(){
@@ -27,7 +30,7 @@ namespace Microsoft.eShopWeb.Web.Controllers.Api
         }
         
         [HttpGet("{idItem}")]
-        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
+        [Authorize(ApiAuthorizationConstants.CATALOG_ITEM_READ_SCOPE)]
         public async Task<ActionResult<CatalogItemViewModel>> GetById(int idItem) {
             try  {
                 var catalogItem = await _catalogViewModelService.GetItemById(idItem);
