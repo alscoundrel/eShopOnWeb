@@ -10,6 +10,11 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
       _provider = provider;
     }
 
+    /// <summary>
+    /// list of all routes of the web application
+    /// </summary>
+    /// <returns></returns>
+    /// <response code="200">Return routes list</response>
     [HttpGet("routes")]
     public IActionResult GetRoutes() {
         var routes = _provider.ActionDescriptors.Items.Select(x => new { 

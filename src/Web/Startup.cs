@@ -30,6 +30,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Mime;
+using System.Reflection;
 using Web.Extensions;
 using Web.Extensions.Middleware;
 
@@ -93,7 +94,7 @@ namespace Microsoft.eShopWeb.Web
 
         #region My environments
         /// <summary>
-        /// Estas funções são chamadas por convenção Configure<Ambiente>Services()
+        /// Estas funções são chamadas por convenção Configure Services()
         /// </summary>
         /// <param name="services"></param>
         public void ConfigureAzureServices(IServiceCollection services){
@@ -203,6 +204,10 @@ namespace Microsoft.eShopWeb.Web
                 c.AddSecurityDefinition(SwaggerConstants.IDENTITY_SERVER_SECURITY_SCHEME.Name, SwaggerConstants.IDENTITY_SERVER_SECURITY_SCHEME);
 
                 c.OperationFilter<AssignOAuth2SecurityRequirements>();
+                // tornar a especificação da API mais detalhada.
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                c.IncludeXmlComments(xmlPath);
             });
 
             services.AddHealthChecks();

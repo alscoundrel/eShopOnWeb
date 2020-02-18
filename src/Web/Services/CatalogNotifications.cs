@@ -72,7 +72,7 @@ namespace Microsoft.eShopWeb.Web.Services
         /// Catalog Item Notify
         /// </summary>
         /// <param name="itemId"></param>
-        /// <param name="priceChenged"></param>
+        /// <param name="priceNew"></param>
         /// <returns></returns>
         public async Task CatalogItemsNotifyAsync(int itemId, decimal priceNew){
             _logger.LogInformation("Inicialize catalog items notify...");

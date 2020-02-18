@@ -21,9 +21,10 @@ namespace Microsoft.eShopWeb.Web.Controllers.Api
         public BrandsController(IAsyncRepository<CatalogBrand> brandRepository) => _brandRepository = brandRepository;
 
         /// <summary>
-        /// return catalog brands list
+        /// All catalog brands list
         /// </summary>
         /// <returns></returns>
+        /// <response code="200">Return CatalogBrand list</response>
         [HttpGet]
         [Authorize(ApiAuthorizationConstants.CATALOG_BRAND_READ_SCOPE)]
         public async Task<ActionResult<IReadOnlyList<CatalogBrand>>> List()
@@ -33,26 +34,30 @@ namespace Microsoft.eShopWeb.Web.Controllers.Api
         }
 
         /// <summary>
-        /// Get catalog brand by id
+        /// Catalog brand by id
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
+        /// <response code="200">Return CatalogBrand by id</response>
+        /// <response code="400">Somehere an error was triggered</response>
         [HttpGet("{id}")]
         [Authorize(ApiAuthorizationConstants.CATALOG_BRAND_READ_SCOPE)]
         public async Task<ActionResult<CatalogBrand>> GetById(int id) {
             try  {
                 var brand = await _brandRepository.GetByIdAsync(id);
                 return Ok(brand);
-            } catch (ModelNotFoundException) {
-                return NotFound();
+            } catch (ModelNotFoundException me) {
+                return BadRequest(me);
             }
         }
 
         /// <summary>
-        /// Get Catalog Brand by brand name
+        /// Catalog brand by brand name
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
+        /// <response code="200">Return CatalogBrand by name</response>
+        /// <response code="400">Somehere an error was triggered</response>
         [HttpGet("{name}")]
         [Authorize(ApiAuthorizationConstants.CATALOG_BRAND_READ_SCOPE)]
         public async Task<ActionResult<CatalogBrand>> GetByBrand(string name) {
@@ -60,8 +65,8 @@ namespace Microsoft.eShopWeb.Web.Controllers.Api
                 var brands = await _brandRepository.ListAllAsync();
                 var brandFindeds = brands.Where(x => string.Compare(x.Brand, name, StringComparison.InvariantCultureIgnoreCase) == 0);
                 return Ok(brandFindeds);
-            } catch (ModelNotFoundException) {
-                return NotFound();
+            } catch (ModelNotFoundException me) {
+                return BadRequest(me);
             }
         }
 
@@ -69,8 +74,19 @@ namespace Microsoft.eShopWeb.Web.Controllers.Api
         /// <summary>
         /// Insert new catalog brand
         /// </summary>
+        /// <remarks>
+        /// Example:
+        ///
+        ///     CatalogBrand
+        ///     {
+        ///        "Brand": "Brand1"
+        ///     }
+        /// </remarks>
         /// <param name="catalogBrand"></param>
         /// <returns></returns>
+        /// <response code="200">CatalogBrand successfully saved</response>
+        /// <response code="400">Somehere an error was triggered</response>
+        /// <response code="409">CatalogBrand exists with the same name</response>
         [HttpPost]
         [Authorize(ApiAuthorizationConstants.CATALOG_BRAND_WRITE_SCOPE)]
         [Authorize(Roles=AuthorizationConstants.Roles.ADMINISTRATORS)]
@@ -85,17 +101,29 @@ namespace Microsoft.eShopWeb.Web.Controllers.Api
 
                 await _brandRepository.AddAsync(catalogBrand);
                 return Ok();
-            } catch (ModelNotFoundException) {
-                return NotFound();
+            } catch (ModelNotFoundException me) {
+                return BadRequest(me);
             }
         }
 
         /// <summary>
-        /// Update Catalog brand
+        /// Update catalog brand
         /// api/Brands/
         /// </summary>
+        /// <remarks>
+        /// Example:
+        ///
+        ///     CatalogBrand
+        ///     {
+        ///        "Id" : 2,    
+        ///        "Brand": "Brand1"
+        ///     }
+        /// </remarks>
         /// <param name="catalogBrand"></param>
         /// <returns></returns>
+        /// <response code="200">CatalogBrand successfully updated</response>
+        /// <response code="400">Somehere an error was triggered</response>
+        /// <response code="409">CatalogBrand exists with the same name</response>
         [HttpPut]
         [Authorize(ApiAuthorizationConstants.CATALOG_BRAND_WRITE_SCOPE)]
         [Authorize(Roles=AuthorizationConstants.Roles.ADMINISTRATORS)]
@@ -111,17 +139,19 @@ namespace Microsoft.eShopWeb.Web.Controllers.Api
 
                 await _brandRepository.UpdateAsync(catalogBrand);
                 return Ok();
-            } catch (ModelNotFoundException) {
-                return NotFound();
+            } catch (ModelNotFoundException me) {
+                return BadRequest(me);
             }
         }
 
         /// <summary>
-        /// Delete Catalog Brand By id
+        /// Delete catalog crand By id
         /// api/Brands/5
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
+        /// <response code="200">CatalogBrand successfully deleted</response>
+        /// <response code="400">Somehere an error was triggered</response>
         [HttpDelete("{id}")]
         [Authorize(ApiAuthorizationConstants.CATALOG_BRAND_WRITE_SCOPE)]
         [Authorize(Roles=AuthorizationConstants.Roles.ADMINISTRATORS)]
@@ -133,8 +163,8 @@ namespace Microsoft.eShopWeb.Web.Controllers.Api
 
                 await _brandRepository.DeleteAsync(brand);
                 return Ok(brand);
-            } catch (ModelNotFoundException) {
-                return NotFound();
+            } catch (ModelNotFoundException me) {
+                return BadRequest(me);
             }
         }
     }
