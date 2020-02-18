@@ -10,6 +10,10 @@ namespace Microsoft.eShopWeb.Web.Extensions
 
         public static string GenerateCatalogItemCacheKey(CatalogPageFiltersViewModel catalogPageFiltersViewModel)
         {
+            if (catalogPageFiltersViewModel.PageId < 0) {
+                throw new InvalidPageIndexException(catalogPageFiltersViewModel.PageId);
+            }
+
             string searchTerms = string.IsNullOrEmpty(catalogPageFiltersViewModel.SearchTextFilter)?"":catalogPageFiltersViewModel.SearchTextFilter.Replace(" ", "");
             return string.Format(_itemsKeyTemplate, catalogPageFiltersViewModel.PageId, catalogPageFiltersViewModel.ItemsPerPage, catalogPageFiltersViewModel.Culture, catalogPageFiltersViewModel.BrandFilter, catalogPageFiltersViewModel.TypesFilter, searchTerms, 
             catalogPageFiltersViewModel.OrderBy, catalogPageFiltersViewModel.Order.ToString());
