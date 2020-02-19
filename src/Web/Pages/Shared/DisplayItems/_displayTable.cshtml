@@ -1,11 +1,13 @@
-﻿@model IEnumerable<CatalogItemViewModel>
+﻿@inject IViewLocalizer Localizer;
+@model IEnumerable<CatalogItemViewModel>
+
 
 <Table>
 	<thead>
 		<th></th>
-		<th>Name</th>
-		<th>Price</th>
-		<th>Action</th>
+		<th>@Localizer["Name"]</th>
+		<th>@Localizer["Price"]</th>
+		<th>@Localizer["Action"]</th>
 	</thead>
 	@foreach (var catalogItem in Model)
 	{
@@ -20,12 +22,12 @@
 				</td>
 			}
 			else{
-				<td class="esh-catalog-price">Sob-Consulta</td>
+				<td class="esh-catalog-price">@Localizer["on request"]</td>
 			}
 			<td>
 				@if(catalogItem.ShowPrice){
 					<form asp-page="/Basket/Index" method="post">
-						<input class="esh-catalog-button-expanded" type="submit" value="[ ADD TO BASKET ]" />
+						<input class="esh-catalog-button-expanded" type="submit" value=@Localizer["to basket"] />
 						<input type="hidden" asp-for="@catalogItem.Id" name="id" />
 						<input type="hidden" asp-for="@catalogItem.Name" name="name" />
 						<input type="hidden" asp-for="@catalogItem.PictureUri" name="pictureUri" />

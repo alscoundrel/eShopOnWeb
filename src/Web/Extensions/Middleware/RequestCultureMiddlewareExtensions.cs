@@ -16,8 +16,6 @@ namespace Web.Extensions.Middleware
             {
                 new CultureInfo("en-US"),
                 new CultureInfo("en-GB"),
-                new CultureInfo("de"),
-                new CultureInfo("fr-FR"),
                 new CultureInfo("pt-PT")
             };
             var configuration = app.ApplicationServices.GetService<IConfiguration>();

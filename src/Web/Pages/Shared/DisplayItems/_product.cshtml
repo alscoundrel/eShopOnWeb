@@ -1,4 +1,6 @@
-﻿@model CatalogItemViewModel
+﻿@inject IViewLocalizer Localizer;
+
+@model CatalogItemViewModel
 
 @{
     var mid = $"storeAvailabilityModal{Model.Id}";
@@ -13,7 +15,7 @@
     </a>
 
     @if(Model.ShowPrice){
-        <input class="esh-catalog-button" type="submit" value="[ ADD TO BASKET ]" />
+        <input class="esh-catalog-button" type="submit" value=@Localizer["to basket"] />
     }
     <div class="esh-catalog-name">
         <span>@Model.Name</span>
@@ -29,7 +31,7 @@
             <input type="hidden" asp-for="@Model.Price" name="price" />
         }
         else{
-            <span>"On Request"</span>
+            <span>@Localizer["on request"]</span>
         }
     </div>
 </form>
@@ -50,14 +52,14 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title" id="myModalLabel">Item Information</h4>
+                <h4 class="modal-title" id="myModalLabel">@Localizer["Item Information"]</h4>
             </div>
             <div class="modal-body">
-                <h3>Store Availability</h3>
+                <h3>@Localizer["Store Availability"]</h3>
                 <div id="@contentAvailability"></div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">@Localizer["close"]</button>
             </div>
         </div>
     </div>

@@ -116,7 +116,13 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Hello" xml:space="preserve">
-    <value>Olá</value>
+  <data name="title" xml:space="preserve">
+    <value>Catálogo</value>
+  </data>
+    <data name="by" xml:space="preserve">
+    <value>Por</value>
+  </data>
+  <data name="no results" xml:space="preserve">
+    <value>"NENHUM RESULTADO CORRESPONDE À SUA PESQUISA"</value>
   </data>
 </root>

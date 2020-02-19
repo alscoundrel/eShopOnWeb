@@ -1,4 +1,5 @@
-﻿@model PaginationInfoViewModel
+﻿@inject IViewLocalizer Localizer;
+@model PaginationInfoViewModel
 
 @{
 
@@ -18,17 +19,20 @@
 		<article class="esh-pager-wrapper row">
 			<nav>
 				<div class="col-md-2 col-xs-12">
-					<a class="esh-pager-item-left esh-pager-item--navigable esh-pager-item @Model.Previous" id="Previous" asp-all-route-data="@buildQueryStringDict(reference, previous)" aria-label="Previous">Previous</a>
+					<a class="esh-pager-item-left esh-pager-item--navigable esh-pager-item @Model.Previous" id="Previous" asp-all-route-data="@buildQueryStringDict(reference, previous)" aria-label="Previous">@Localizer["Previous"]</a>
 				</div>
 				
 				<div class="col-md-8 col-xs-12">
 					<span class="esh-pager-item">
-						Showing @Model.ItemsPerPage of @Model.TotalItems products - Page @(Model.ActualPage + 1) - @Model.TotalPages
+						@{
+							string Showing = String.Format(Localizer["showing"].Value, @Model.ItemsPerPage, @Model.TotalItems, @Model.ActualPage + 1, @Model.TotalPages);
+						}
+						@Showing
 					</span>
 				</div>
 		        
 				<div class="col-md-2 col-xs-12">
-					<a class="esh-pager-item-right esh-pager-item--navigable esh-pager-item @Model.Next" id="Next" asp-all-route-data="@buildQueryStringDict(reference, next)" aria-label="Next">Next</a>
+					<a class="esh-pager-item-right esh-pager-item--navigable esh-pager-item @Model.Next" id="Next" asp-all-route-data="@buildQueryStringDict(reference, next)" aria-label="Next">@Localizer["Next"]</a>
 				</div>
 			</nav>
 		</article>

@@ -24,6 +24,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Localization;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -35,6 +36,10 @@ using Web.Extensions;
 using Web.Extensions.Middleware;
 
 [assembly : ApiConventionType(typeof(DefaultApiConventions))]
+//use for translation "ex. IViewLocation" 
+[assembly: ResourceLocation("Resources")]
+[assembly: RootNamespace("Microsoft.eShopWeb.Web")]
+
 namespace Microsoft.eShopWeb.Web
 {
     public class Startup
