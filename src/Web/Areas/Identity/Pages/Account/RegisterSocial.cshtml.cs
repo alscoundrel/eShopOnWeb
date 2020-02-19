@@ -21,13 +21,13 @@ namespace Microsoft.eShopWeb.Web.Areas.Identity.Pages.Account
     {
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly UserManager<ApplicationUser> _userManager;
-        private readonly ILogger<RegisterModel> _logger;
+        private readonly ILogger<RegisterSocialModel> _logger;
         private readonly IEmailSender _emailSender;
 
         public RegisterSocialModel(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
-            ILogger<RegisterModel> logger,
+            ILogger<RegisterSocialModel> logger,
             IEmailSender emailSender)
         {
             _userManager = userManager;

@@ -22,7 +22,7 @@ namespace Microsoft.eShopWeb.Web.Pages.Admin
         private readonly IMemoryCache _cache;
         private readonly IConfiguration _configuration;
         private readonly IWebHostEnvironment _webHostEnvironment;
-        private readonly ILogger<CatalogItem> _logger;
+        private readonly ILogger<IndexModel> _logger;
 
         public IndexModel(ICatalogViewModelService catalogViewModelService, ICatalogItemViewModelService catalogItemViewModelService, IMemoryCache cache, IConfiguration configuration, IWebHostEnvironment webHostEnvironment, ILoggerFactory loggerFactory)
         {
@@ -31,7 +31,7 @@ namespace Microsoft.eShopWeb.Web.Pages.Admin
             _cache = cache;
             _configuration = configuration;
             _webHostEnvironment = webHostEnvironment;
-            _logger = loggerFactory.CreateLogger<CatalogItem>();
+            _logger = loggerFactory.CreateLogger<IndexModel>();
         }
 
         public CatalogIndexViewModel CatalogModel { get; set; } = new CatalogIndexViewModel();

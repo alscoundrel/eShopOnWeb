@@ -90,7 +90,7 @@ namespace Microsoft.eShopWeb.Web.Controllers.Api
         [HttpPost]
         [Authorize(ApiAuthorizationConstants.CATALOG_BRAND_WRITE_SCOPE)]
         [Authorize(Roles=AuthorizationConstants.Roles.ADMINISTRATORS)]
-        public async Task<ActionResult<IReadOnlyList<CatalogBrand>>> Post(CatalogBrand catalogBrand)
+        public async Task<ActionResult> Post(CatalogBrand catalogBrand)
         {
 
             try  {
@@ -127,7 +127,7 @@ namespace Microsoft.eShopWeb.Web.Controllers.Api
         [HttpPut]
         [Authorize(ApiAuthorizationConstants.CATALOG_BRAND_WRITE_SCOPE)]
         [Authorize(Roles=AuthorizationConstants.Roles.ADMINISTRATORS)]
-        public async Task<ActionResult<IReadOnlyList<CatalogBrand>>> Put(CatalogBrand catalogBrand)
+        public async Task<ActionResult<CatalogBrand>> Put(CatalogBrand catalogBrand)
         {
             try  {
                 var brands = await _brandRepository.ListAllAsync();
@@ -138,7 +138,7 @@ namespace Microsoft.eShopWeb.Web.Controllers.Api
                 if(brandFindeds != null){ return Conflict();}
 
                 await _brandRepository.UpdateAsync(catalogBrand);
-                return Ok();
+                return Ok(catalogBrand);
             } catch (ModelNotFoundException me) {
                 return BadRequest(me);
             }
@@ -155,14 +155,14 @@ namespace Microsoft.eShopWeb.Web.Controllers.Api
         [HttpDelete("{id}")]
         [Authorize(ApiAuthorizationConstants.CATALOG_BRAND_WRITE_SCOPE)]
         [Authorize(Roles=AuthorizationConstants.Roles.ADMINISTRATORS)]
-        public async Task<ActionResult<IReadOnlyList<CatalogBrand>>> Delete(int id)
+        public async Task<ActionResult> Delete(int id)
         {
             try  {
                 var brand = await _brandRepository.GetByIdAsync(id);
                 if(brand == null){ return NotFound();}
 
                 await _brandRepository.DeleteAsync(brand);
-                return Ok(brand);
+                return Ok();
             } catch (ModelNotFoundException me) {
                 return BadRequest(me);
             }
