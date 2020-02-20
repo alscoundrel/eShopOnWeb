@@ -7,7 +7,7 @@
 <div class="container account-login-container">
     <p>
         @* <a asp-controller="Order" asp-action="AdminDetail" asp-route-id="@Model.OrderViewModel.Id">Return</a> *@
-        <a href="/Order/AdminDetail/@Model.OrderViewModel.Id">Return</a>
+        <a href="/Order/AdminDetail/@Model.OrderId">Return</a>
     </p>
     <h2>@ViewData["Title"]</h2>
     <div class="row">
@@ -17,8 +17,8 @@
                     <hr />
                     <div asp-validation-summary="All" class="text-danger"></div>
                     <div class="form-group">
-                        <label for="Status"></label>
-                        <select name="Status" asp-items="@Model.OrderViewModel.StatusList" class="form-control"></select>
+                        <label asp-for="@Model.Status"></label>
+                        <select asp-for="@Model.Status" asp-items="@Model.StatusList" class="form-control"></select>
                     </div>
                     <div class="form-group">
                         <label for="Comment">Comment</label>
@@ -27,7 +27,7 @@
                     <div class="form-group">
                         <button type="submit" class="btn btn-default">Submit</button>
                     </div>
-                    <input type="hidden" name="OrderId" value="@Model.OrderViewModel.Id"/>
+                    <input type="hidden" asp-for="@Model.OrderId"/>
                 </form>
             </section>
         </div>

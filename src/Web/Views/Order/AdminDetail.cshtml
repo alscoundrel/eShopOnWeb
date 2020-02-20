@@ -8,7 +8,7 @@
     <div class="container">
         <p>
             <a asp-controller="Order" asp-action="AdminOrders">Return</a>
-            <form asp-page="/Order" method="get">
+            <form action="/OrderDetails" method="get">
                 <input type="hidden" name="OrderId" value="@Model.OrderNumber">
                 <button class="btn btn-default" type="submit">Edit</button>
             </form>
@@ -86,7 +86,7 @@
             </article>
 
             <article class="esh-orders-detail-items row">
-                <section class="esh-orders-detail-item col-xs-12">@Model.Commentes</section>
+                <section class="esh-orders-detail-item col-xs-12">@Html.Raw(Model.Commentes.Replace(Environment.NewLine, "<br />"))</section>
             </article>
         </section>
     </div>

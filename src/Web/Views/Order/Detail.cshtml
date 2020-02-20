@@ -71,5 +71,15 @@
                 <section class="esh-orders-detail-item esh-orders-detail-item--mark col-xs-2">$ @Model.Total.ToString("N2")</section>
             </article>
         </section>
+
+        <section class="esh-orders-detail-section">
+            <article class="esh-orders-detail-titles row">
+                <section class="esh-orders-detail-title col-xs-12">Comments</section>
+            </article>
+
+            <article class="esh-orders-detail-items row">
+                <section class="esh-orders-detail-item col-xs-12">@Html.Raw(Model.Commentes.Replace(Environment.NewLine, "<br />"))</section>
+            </article>
+        </section>
     </div>
 </div>

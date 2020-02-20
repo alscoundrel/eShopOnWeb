@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ApplicationCore.UseTypes;
@@ -14,7 +15,7 @@ using Microsoft.eShopWeb.Infrastructure.Identity;
 using Microsoft.eShopWeb.Web.Extensions;
 using Microsoft.Extensions.Logging;
 
-namespace Microsoft.eShopWeb.Web.Pages.Order
+namespace Microsoft.eShopWeb.Web.Pages.OrderDetails
 {
     public class IndexOrderModel : PageModel
     {
@@ -33,17 +34,17 @@ namespace Microsoft.eShopWeb.Web.Pages.Order
             _emailSender = emailSender;
         }
 
-        public OrderPageViewModel OrderViewModel;
+        public int OrderId { get; set; }
+        public OrderStatus Status { get; set; }
+        public string Comment { get; set; }
+        public IEnumerable<SelectListItem> StatusList { get; set; }
 
         public async Task OnGet(int orderId)
         {
-
             var order = await _orderRepository.GetByIdAsync(orderId);
-            OrderViewModel = new OrderPageViewModel(){
-                Id = orderId,
-                Status = order.OrderStatus
-            };
-            OrderViewModel.StatusList = Enum<OrderStatus>.GetAll().Select(order => new SelectListItem { Value = order.ToString(), Text = order.ToString() });
+            OrderId = order.Id;
+            Status = order.OrderStatus;
+            StatusList = Enum<OrderStatus>.GetAll().Select(order => new SelectListItem { Value = order.ToString(), Text = order.ToString() });
         }
 
         [Authorize(Roles=AuthorizationConstants.Roles.ADMINISTRATORS)]
@@ -61,12 +62,12 @@ namespace Microsoft.eShopWeb.Web.Pages.Order
             if(!string.IsNullOrEmpty(comment)){
                 var date = DateTime.Now;
                 var userName = _userManager.GetUserName(User);
-                comment = $"{date.ToString("g")} by {userName}\n{comment}";
+                comment = $"{date.ToString("g")} by {userName}{Environment.NewLine}{comment}";
                 if(string.IsNullOrEmpty(order.Comments)){
                     order.Comments = comment;
                 }
                 else{
-                    order.Comments = $"{order.Comments}\n\n{comment}";
+                    order.Comments = $"{order.Comments}{Environment.NewLine}{Environment.NewLine}{comment}";
                 }
                 addedNewComment = true;
             }
@@ -77,7 +78,12 @@ namespace Microsoft.eShopWeb.Web.Pages.Order
                     await sendEmailToClientAsync(order.Id, changedStatus?status.ToString():null, comment);
                 }
             }
-            return RedirectToPage("/Order");
+            catch(Exception excp){
+                throw new Exception("Update Fails: ", excp);
+            }
+
+            return Redirect($"/Order/AdminDetail/{orderId}");
+            //return RedirectToAction("AdminDetail", "Order", orderId);
         }
 
         private async Task sendEmailToClientAsync(int orderNumber, string status, string comment){
