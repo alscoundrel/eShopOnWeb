@@ -6,6 +6,14 @@
 
 <div class="esh-orders-detail">
     <div class="container">
+        <p>
+            <a asp-controller="Order" asp-action="AdminOrders">Return</a>
+            <form asp-page="/Order" method="get">
+                <input type="hidden" name="OrderId" value="@Model.OrderNumber">
+                <button class="btn btn-default" type="submit">Edit</button>
+            </form>
+        </p>
+        
         <section class="esh-orders-detail-section">
             <article class="esh-orders-detail-titles row">
                 <section class="esh-orders-detail-title col-xs-3">Order number</section>
@@ -69,6 +77,16 @@
             <article class="esh-orders-detail-items row">
                 <section class="esh-orders-detail-item col-xs-9"></section>
                 <section class="esh-orders-detail-item esh-orders-detail-item--mark col-xs-2">$ @Model.Total.ToString("N2")</section>
+            </article>
+        </section>
+
+        <section class="esh-orders-detail-section">
+            <article class="esh-orders-detail-titles row">
+                <section class="esh-orders-detail-title col-xs-12">Comments</section>
+            </article>
+
+            <article class="esh-orders-detail-items row">
+                <section class="esh-orders-detail-item col-xs-12">@Model.Commentes</section>
             </article>
         </section>
     </div>

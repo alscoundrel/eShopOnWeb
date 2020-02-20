@@ -119,6 +119,9 @@
   <data name="admin" xml:space="preserve">
     <value>Admin</value>
   </data>
+  <data name="Admin orders" xml:space="preserve">
+    <value>Admin orders</value>
+  </data>
   <data name="My orders" xml:space="preserve">
     <value>My orders</value>
   </data>

@@ -299,6 +299,9 @@ namespace Microsoft.eShopWeb.Web.Controllers
             {
                 throw new ApplicationException($"Unexpected error occurred removing external login for user with ID '{user.Id}'.");
             }
+            
+             // Clear the existing external cookie to ensure a clean login process
+            await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
 
             await _signInManager.SignInAsync(user, isPersistent: false);
             StatusMessage = "The external login was removed.";

@@ -2,6 +2,7 @@
 using Ardalis.GuardClauses;
 using System;
 using System.Collections.Generic;
+using ApplicationCore.UseTypes;
 
 namespace Microsoft.eShopWeb.ApplicationCore.Entities.OrderAggregate
 {
@@ -26,6 +27,8 @@ namespace Microsoft.eShopWeb.ApplicationCore.Entities.OrderAggregate
 
         public DateTimeOffset OrderDate { get; private set; } = DateTimeOffset.Now;
         public Address ShipToAddress { get; private set; }
+        public OrderStatus OrderStatus { get; private set; } = OrderStatus.Submitted;
+        public string Comments { get; private set;}
 
         // DDD Patterns comment
         // Using a private collection field, better for DDD Aggregate's encapsulation

@@ -10,5 +10,11 @@ namespace Microsoft.eShopWeb.ApplicationCore.Specifications
         {
             AddIncludes(query => query.Include(o => o.OrderItems).ThenInclude(i => i.ItemOrdered));
         }
+
+        public CustomerOrdersWithItemsSpecification()
+            : base(o => true)
+        {
+            AddIncludes(query => query.Include(o => o.OrderItems).ThenInclude(i => i.ItemOrdered));
+        }
     }
 }

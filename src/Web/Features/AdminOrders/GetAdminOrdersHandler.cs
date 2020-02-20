@@ -7,25 +7,25 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Microsoft.eShopWeb.Web.Features.MyOrders
+namespace Microsoft.eShopWeb.Web.Features.AdminOrders
 {
-    public class GetMyOrdersHandler : IRequestHandler<GetMyOrders, IEnumerable<OrderViewModel>>
+    public class GetAdminOrdersHandler : IRequestHandler<GetAdminOrders, IEnumerable<OrderViewModel>>
     {
         private readonly IOrderRepository _orderRepository;
 
-        public GetMyOrdersHandler(IOrderRepository orderRepository)
+        public GetAdminOrdersHandler(IOrderRepository orderRepository)
         {
             _orderRepository = orderRepository;
         }
 
-        public async Task<IEnumerable<OrderViewModel>> Handle(GetMyOrders request, CancellationToken cancellationToken)
+        public async Task<IEnumerable<OrderViewModel>> Handle(GetAdminOrders request, CancellationToken cancellationToken)
         {
-            var specification = new CustomerOrdersWithItemsSpecification(request.UserName);
+            var specification = new CustomerOrdersWithItemsSpecification();
             var orders = await _orderRepository.ListAsync(specification);
-
             return orders.Select(o => new OrderViewModel
             {
                 OrderDate = o.OrderDate,
+                OrderBy = o.BuyerId,
                 OrderItems = o.OrderItems?.Select(oi => new OrderItemViewModel()
                 {
                     PictureUrl = oi.ItemOrdered.PictureUri,
@@ -36,6 +36,7 @@ namespace Microsoft.eShopWeb.Web.Features.MyOrders
                 }).ToList(),
                 OrderNumber = o.Id,
                 ShippingAddress = o.ShipToAddress,
+                Status = o.OrderStatus,
                 Commentes = o.Comments,
                 Total = o.Total()
             });

@@ -17,4 +17,15 @@ namespace ApplicationCore.UseTypes
         EMail,
         SMS
     }
+
+    public enum OrderStatus{
+        Submitted,
+        Accepted,
+        Pending,
+        Confirmed,
+        Canceled,
+        Sent,
+        Delivered,
+        Returned
+    }
 }

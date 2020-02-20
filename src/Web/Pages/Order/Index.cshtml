@@ -1,0 +1,35 @@
+﻿@page "{handler?}"
+@model IndexOrderModel
+@{
+    ViewData["Title"] = "Edit Order";
+}
+
+<div class="container account-login-container">
+    <p>
+        @* <a asp-controller="Order" asp-action="AdminDetail" asp-route-id="@Model.OrderViewModel.Id">Return</a> *@
+        <a href="/Order/AdminDetail/@Model.OrderViewModel.Id">Return</a>
+    </p>
+    <h2>@ViewData["Title"]</h2>
+    <div class="row">
+        <div class="col-md-12">
+            <section>
+                <form method="post">
+                    <hr />
+                    <div asp-validation-summary="All" class="text-danger"></div>
+                    <div class="form-group">
+                        <label for="Status"></label>
+                        <select name="Status" asp-items="@Model.OrderViewModel.StatusList" class="form-control"></select>
+                    </div>
+                    <div class="form-group">
+                        <label for="Comment">Comment</label>
+                        <textarea name="Comment" class="form-control"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-default">Submit</button>
+                    </div>
+                    <input type="hidden" name="OrderId" value="@Model.OrderViewModel.Id"/>
+                </form>
+            </section>
+        </div>
+    </div>
+</div>

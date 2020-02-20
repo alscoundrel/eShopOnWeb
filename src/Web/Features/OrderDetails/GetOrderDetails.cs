@@ -13,5 +13,10 @@ namespace Microsoft.eShopWeb.Web.Features.OrderDetails
             UserName = userName;
             OrderId = orderId;
         }
+
+        public GetOrderDetails(int orderId)
+        {
+            OrderId = orderId;
+        }
     }
 }

@@ -17,6 +17,11 @@
                            asp-page="/Admin/Index">
                             <div class="esh-identity-name esh-identity-name--upper">@Localizer["Admin"]</div>
                         </a>
+                        <a class="esh-identity-item"
+                            asp-controller="Order"
+                            asp-action="AdminOrders">
+                            <div class="esh-identity-name esh-identity-name--upper">@Localizer["Admin orders"]</div>
+                        </a>
                     }
                     <a class="esh-identity-item"
                        asp-controller="Order"

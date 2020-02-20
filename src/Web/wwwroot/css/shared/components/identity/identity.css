@@ -30,13 +30,16 @@
 .esh-identity-drop {
   background: #FFFFFF;
   height: 10px;
-  width: 10rem;
+  width: auto;
   overflow: hidden;
   padding: .5rem;
   position: absolute;
   right: 0;
   top: 2.5rem;
   transition: height 0.35s;
+}
+.esh-identity-drop a{
+  display: block;
 }
 
 .esh-identity:hover .esh-identity-drop {

@@ -119,7 +119,10 @@
   <data name="admin" xml:space="preserve">
     <value>Admin</value>
   </data>
-    <data name="My orders" xml:space="preserve">
+  <data name="Admin orders" xml:space="preserve">
+    <value>Administrar Pedidos</value>
+  </data>
+  <data name="My orders" xml:space="preserve">
     <value>Meus pedidos</value>
   </data>
   <data name="My account" xml:space="preserve">
