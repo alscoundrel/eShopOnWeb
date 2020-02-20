@@ -26,9 +26,9 @@ namespace Microsoft.eShopWeb.ApplicationCore.Entities.OrderAggregate
         public string BuyerId { get; private set; }
 
         public DateTimeOffset OrderDate { get; private set; } = DateTimeOffset.Now;
-        public Address ShipToAddress { get; private set; }
-        public OrderStatus OrderStatus { get; private set; } = OrderStatus.Submitted;
-        public string Comments { get; private set;}
+        public Address ShipToAddress { get; set; }
+        public OrderStatus OrderStatus { get; set; } = OrderStatus.Submitted;
+        public string Comments { get; set;}
 
         // DDD Patterns comment
         // Using a private collection field, better for DDD Aggregate's encapsulation
