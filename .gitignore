@@ -260,6 +260,5 @@ pub/
 \.vscode/
 
 # my ignores
-appsettings.Azure.json
-appsettings.Development.json
-appsettings.Casa.json
+**/appsettings.*.json
+.gitignore
